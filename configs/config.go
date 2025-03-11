@@ -96,7 +96,7 @@ func init() {
 	}
 
 	viper.WatchConfig()
-	viper.OnConfigChange(func(in fsnotify.Event) {
+	viper.OnConfigChange(func(_ fsnotify.Event) {
 		if err := viper.Unmarshal(config); err != nil {
 			panic(err)
 		}
