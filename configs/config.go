@@ -58,7 +58,7 @@ type Config struct {
 func init() {
 	var reader io.Reader
 
-	configPath := "./configs"
+	configPath := "./configs/"
 	prefixFile := "config-"
 
 	switch env.Active().Value() {
