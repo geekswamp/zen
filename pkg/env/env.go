@@ -26,6 +26,7 @@ type (
 		Value() string
 		IsDev() bool
 		IsPro() bool
+		t()
 	}
 
 	environment struct{ value string }
@@ -47,8 +48,10 @@ func (e *environment) IsPro() bool {
 	return e.value == Pro
 }
 
+func (e *environment) t() {}
+
 func init() {
-	env := flag.String("env", "", "Please enter the environment (dev or pro):")
+	env := flag.String("env", "", "Please enter the environment (dev or pro)")
 	flag.Parse()
 
 	switch strings.ToLower(strings.TrimSpace(*env)) {
@@ -56,6 +59,6 @@ func init() {
 		active = proEnv
 	default:
 		active = devEnv
-		fmt.Println("Warning: '-env' can not be found or is it illegal. The default 'dev' will be used.")
+		fmt.Println("Warning: '-env' not found or is invalid. Defaulting to 'dev'.")
 	}
 }
