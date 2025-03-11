@@ -35,6 +35,8 @@ type Config struct {
 		Name     string `mapstructure:"name"`
 		User     string `mapstructure:"user"`
 		Password string `mapstructure:"password"`
+		SSLMode  bool   `mapstructure:"sslmode"`
+		Timezone string `mapstructure:"timezone"`
 
 		Base struct {
 			MaxOpenConn     int       `mapstructure:"max-open-conn"`
