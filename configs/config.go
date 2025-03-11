@@ -35,14 +35,15 @@ type Config struct {
 		Name     string `mapstructure:"name"`
 		User     string `mapstructure:"user"`
 		Password string `mapstructure:"password"`
-		SSLMode  bool   `mapstructure:"sslmode"`
+		Port     int    `mapstructure:"port"`
+		SSLMode  string `mapstructure:"sslmode"`
 		Timezone string `mapstructure:"timezone"`
 
 		Base struct {
-			MaxOpenConn     int       `mapstructure:"max-open-conn"`
-			MaxIdleConn     int       `mapstructure:"max-idle-conn"`
-			ConnMaxLifeTime time.Time `mapstructure:"conn-max-life-time"`
-			ConnMaxIdleTime time.Time `mapstructure:"conn-max-idle-time"`
+			MaxOpenConn     int           `mapstructure:"max-open-conn"`
+			MaxIdleConn     int           `mapstructure:"max-idle-conn"`
+			ConnMaxLifeTime time.Duration `mapstructure:"conn-max-life-time"`
+			ConnMaxIdleTime time.Duration `mapstructure:"conn-max-idle-time"`
 		} `mapstructure:"base"`
 	} `mapstructure:"postgres"`
 
