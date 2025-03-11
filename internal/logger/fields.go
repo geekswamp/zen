@@ -10,6 +10,7 @@ const (
 	logIdKey            string = "log_id"
 	PostgresInstanceKey string = "postgres_instance"
 	RedisInstanceKey    string = "redis_instance"
+	LocalKey            string = "local"
 )
 
 func id() string {
@@ -22,4 +23,8 @@ func Postgres(name string) zapcore.Field {
 
 func Redis(name string) zapcore.Field {
 	return zap.String(RedisInstanceKey, name)
+}
+
+func Local(name string) zapcore.Field {
+	return zap.String(LocalKey, name)
 }
