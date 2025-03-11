@@ -7,5 +7,5 @@ type Config struct {
 }
 
 func NewConfig() Config {
-	return Config{Level: zapcore.Level(0)}
+	return Config{Level: zapcore.Level(zapcore.DebugLevel)}
 }
