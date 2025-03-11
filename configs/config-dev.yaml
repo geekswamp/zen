@@ -1,0 +1,24 @@
+app:
+    host: 127.0.0.1
+    port: 8080
+
+argon2:
+    iterations: 3
+    memory: 12288
+    parallelism: 1
+    pepper: 439?kE0C*RX?u/E(b,tweQcU/ZVSm8
+    
+postgres:
+    address: 127.0.0.1
+    name:
+    user:
+    password: 
+    port:
+    sslmode: disable
+    timezone: Asia/Jakarta
+
+    base:
+      conn-max-idle-time: 60
+      conn-max-life-time: 60
+      max-idle-conn: 60
+      max-open-conn: 10
