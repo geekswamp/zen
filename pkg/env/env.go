@@ -51,7 +51,7 @@ func (e *environment) IsPro() bool {
 func (e *environment) t() {}
 
 func init() {
-	env := flag.String("env", "", "Please enter the environment (dev or pro)")
+	env := flag.String("env", "dev", "Your environment mode (dev or pro)")
 	flag.Parse()
 
 	switch strings.ToLower(strings.TrimSpace(*env)) {
