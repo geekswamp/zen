@@ -47,12 +47,15 @@ type Config struct {
 		} `mapstructure:"base"`
 	} `mapstructure:"postgres"`
 
-	Argon2 struct {
-		Pepper      string `mapstructure:"pepper"`
-		Memory      int    `mapstructure:"memory"`
-		Iterations  int    `mapstructure:"iterations"`
-		Parallelism int    `mapstructure:"parallelism"`
-	} `mapstructure:"argon2"`
+	Password struct {
+		Pepper string `mapstructure:"pepper"`
+
+		Argon2 struct {
+			Memory      int `mapstructure:"memory"`
+			Iterations  int `mapstructure:"iterations"`
+			Parallelism int `mapstructure:"parallelism"`
+		} `mapstructure:"argon2"`
+	} `mapstructure:"password"`
 }
 
 func init() {

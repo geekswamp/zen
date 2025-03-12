@@ -2,11 +2,13 @@ app:
     host: 127.0.0.1
     port: 8080
 
-argon2:
-    iterations: 3
-    memory: 12288
-    parallelism: 1
+password:
     pepper: 439?kE0C*RX?u/E(b,tweQcU/ZVSm8
+    
+    argon2:
+        iterations: 3
+        memory: 12288
+        parallelism: 1
     
 postgres:
     address: 127.0.0.1
