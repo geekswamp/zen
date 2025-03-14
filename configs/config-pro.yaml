@@ -4,7 +4,7 @@ app:
     port: 8080
 
 password:
-    pepper: 439?kE0C*RX?u/E(b,tweQcU/ZVSm8
+    pepper: 2LH[l=TrkwqedS+-w7%tAnHf>VEoiA;J1emwgn9<dymPo}]DH3PmQq>zbfes!sa{
     
     argon2:
         iterations: 3
