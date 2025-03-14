@@ -26,8 +26,9 @@ var (
 
 type Config struct {
 	App struct {
+		Name string `mapstructure:"name"`
 		Host string `mapstructure:"host"`
-		Port int    `mapstructure:"port"`
+		Port uint32 `mapstructure:"port"`
 	} `mapstructure:"app"`
 
 	Postgres struct {
@@ -35,7 +36,7 @@ type Config struct {
 		Name     string `mapstructure:"name"`
 		User     string `mapstructure:"user"`
 		Password string `mapstructure:"password"`
-		Port     int    `mapstructure:"port"`
+		Port     uint32 `mapstructure:"port"`
 		SSLMode  string `mapstructure:"sslmode"`
 		Timezone string `mapstructure:"timezone"`
 
@@ -51,9 +52,11 @@ type Config struct {
 		Pepper string `mapstructure:"pepper"`
 
 		Argon2 struct {
-			Memory      int `mapstructure:"memory"`
-			Iterations  int `mapstructure:"iterations"`
-			Parallelism int `mapstructure:"parallelism"`
+			Memory      uint32 `mapstructure:"memory"`
+			Iterations  uint32 `mapstructure:"iterations"`
+			Parallelism uint8  `mapstructure:"parallelism"`
+			SaltLength  uint32 `mapstructure:"salt-length"`
+			KeyLength   uint32 `mapstrucuter:"key-length"`
 		} `mapstructure:"argon2"`
 	} `mapstructure:"password"`
 }
