@@ -27,3 +27,8 @@ postgres:
       conn-max-life-time: 60
       max-idle-conn: 60
       max-open-conn: 10
+
+jwt:
+    pub-key-path:
+    priv-key-path:
+    expires-at:

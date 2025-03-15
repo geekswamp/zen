@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"runtime"
 	"time"
 
 	"github.com/fsnotify/fsnotify"
@@ -56,15 +57,22 @@ type Config struct {
 			Iterations  uint32 `mapstructure:"iterations"`
 			Parallelism uint8  `mapstructure:"parallelism"`
 			SaltLength  uint32 `mapstructure:"salt-length"`
-			KeyLength   uint32 `mapstrucuter:"key-length"`
+			KeyLength   uint32 `mapstructure:"key-length"`
 		} `mapstructure:"argon2"`
 	} `mapstructure:"password"`
+
+	JWT struct {
+		PubKeyPath  string        `mapstructure:"pub-key-path"`
+		PrivKeyPath string        `mapstructure:"priv-key-path"`
+		ExpiresAt   time.Duration `mapstructure:"expires-at"`
+	} `mapstructure:"jwt"`
 }
 
 func init() {
 	var reader io.Reader
 
-	configPath := "./configs/"
+	_, filename, _, _ := runtime.Caller(0)
+	configPath := filepath.Dir(filename) + "/"
 	prefixFile := "config-"
 
 	switch env.Active().Value() {
