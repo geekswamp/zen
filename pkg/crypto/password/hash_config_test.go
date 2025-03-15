@@ -8,14 +8,7 @@ import (
 )
 
 func TestHashGenerate(t *testing.T) {
-	pepper := "this-is-a-secure-pepper-with-32-bytes!"
-	memory := uint32(64 * 1024)
-	iterations := uint32(3)
-	parallelism := uint8(4)
-	saltLength := uint32(16)
-	keyLength := uint32(32)
-
-	h := password.New(pepper, memory, iterations, saltLength, keyLength, parallelism)
+	h := password.NewDefault()
 
 	testCases := []struct {
 		name     string
@@ -65,14 +58,7 @@ func TestHashGenerate(t *testing.T) {
 }
 
 func TestHashVerify(t *testing.T) {
-	pepper := "this-is-a-secure-pepper-with-32-bytes!"
-	memory := uint32(64 * 1024)
-	iterations := uint32(3)
-	parallelism := uint8(4)
-	saltLength := uint32(16)
-	keyLength := uint32(32)
-
-	h := password.New(pepper, memory, iterations, saltLength, keyLength, parallelism)
+	h := password.NewDefault()
 
 	password := []byte("test-password")
 	hash, err := h.Generate(password)
@@ -124,17 +110,8 @@ func TestHashVerify(t *testing.T) {
 }
 
 func TestDifferentPeppers(t *testing.T) {
-	memory := uint32(64 * 1024)
-	iterations := uint32(3)
-	parallelism := uint8(4)
-	saltLength := uint32(16)
-	keyLength := uint32(32)
-
-	pepper1 := "this-is-a-secure-pepper-with-32-bytes!"
-	pepper2 := "this-is-another-pepper-with-diff-bytes"
-
-	h1 := password.New(pepper1, memory, iterations, saltLength, keyLength, parallelism)
-	h2 := password.New(pepper2, memory, iterations, saltLength, keyLength, parallelism)
+	h1 := password.NewDefault()
+	h2 := password.New("this-is-pepper", 12288, 3, 32, 32, 1)
 
 	password := []byte("test-password")
 
@@ -151,14 +128,7 @@ func TestDifferentPeppers(t *testing.T) {
 }
 
 func TestDecodeHashErrors(t *testing.T) {
-	pepper := "this-is-a-secure-pepper-with-32-bytes!"
-	memory := uint32(64 * 1024)
-	iterations := uint32(3)
-	parallelism := uint8(4)
-	saltLength := uint32(16)
-	keyLength := uint32(32)
-
-	h := password.New(pepper, memory, iterations, saltLength, keyLength, parallelism)
+	h := password.NewDefault()
 
 	testCases := []struct {
 		name string
@@ -191,37 +161,21 @@ func TestDecodeHashErrors(t *testing.T) {
 }
 
 func BenchmarkGenerate(b *testing.B) {
-	pepper := "this-is-a-secure-pepper-with-32-bytes!"
-	memory := uint32(12 * 1024)
-	iterations := uint32(3)
-	parallelism := uint8(1)
-	saltLength := uint32(16)
-	keyLength := uint32(32)
-
-	h := password.New(pepper, memory, iterations, saltLength, keyLength, parallelism)
+	h := password.NewDefault()
 	password := []byte("benchmark-password")
 
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
+	for b.Loop() {
 		_, _ = h.Generate(password)
 	}
 }
 
 func BenchmarkVerify(b *testing.B) {
-	pepper := "this-is-a-secure-pepper-with-32-bytes!"
-	memory := uint32(12 * 1024)
-	iterations := uint32(3)
-	parallelism := uint8(1)
-	saltLength := uint32(16)
-	keyLength := uint32(32)
-
-	h := password.New(pepper, memory, iterations, saltLength, keyLength, parallelism)
+	h := password.NewDefault()
 	password := []byte("benchmark-password")
 
 	hash, _ := h.Generate(password)
 
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
+	for b.Loop() {
 		_, _ = h.Verify(password, hash)
 	}
 }
