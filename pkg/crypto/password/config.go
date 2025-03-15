@@ -13,7 +13,7 @@ import (
 	"golang.org/x/crypto/argon2"
 )
 
-type HashConfig struct {
+type Config struct {
 	pepper      string
 	memory      uint32
 	iterations  uint32
@@ -23,7 +23,7 @@ type HashConfig struct {
 }
 
 func New(pepper string, memory, iterations, saltLength, keyLength uint32, parallelism uint8) Hash {
-	return &HashConfig{
+	return &Config{
 		pepper:      pepper,
 		memory:      memory,
 		iterations:  iterations,
@@ -36,7 +36,7 @@ func New(pepper string, memory, iterations, saltLength, keyLength uint32, parall
 func NewDefault() Hash {
 	cfg := configs.Get().Password
 
-	return &HashConfig{
+	return &Config{
 		pepper:      cfg.Pepper,
 		memory:      cfg.Argon2.Memory,
 		iterations:  cfg.Argon2.Iterations,
@@ -46,7 +46,7 @@ func NewDefault() Hash {
 	}
 }
 
-func (a *HashConfig) Generate(text []byte) (hash string, err error) {
+func (a *Config) Generate(text []byte) (hash string, err error) {
 	pepperedText := append(text, []byte(a.pepper)...)
 
 	salt, err := generateRandomBytes(a.saltLength)
@@ -64,7 +64,7 @@ func (a *HashConfig) Generate(text []byte) (hash string, err error) {
 	return hash, nil
 }
 
-func (a *HashConfig) Verify(text []byte, hash string) (bool, error) {
+func (a *Config) Verify(text []byte, hash string) (bool, error) {
 	pepperedText := append(text, []byte(a.pepper)...)
 
 	h, salt, hashed, err := decodeHash(hash)
@@ -91,7 +91,7 @@ func generateRandomBytes(n uint32) ([]byte, error) {
 	return b, nil
 }
 
-func decodeHash(encodedHash string) (ph *HashConfig, salt, b []byte, err error) {
+func decodeHash(encodedHash string) (ph *Config, salt, b []byte, err error) {
 	vals := strings.Split(encodedHash, "$")
 	if len(vals) != 6 {
 		return nil, nil, nil, errors.ErrInvalidHashFormat
@@ -106,7 +106,7 @@ func decodeHash(encodedHash string) (ph *HashConfig, salt, b []byte, err error) 
 		return nil, nil, nil, errors.ErrIncompatibleArgon2Version
 	}
 
-	ph = &HashConfig{}
+	ph = &Config{}
 	_, err = fmt.Sscanf(vals[3], "m=%d,t=%d,p=%d", &ph.memory, &ph.iterations, &ph.parallelism)
 	if err != nil {
 		return nil, nil, nil, err
