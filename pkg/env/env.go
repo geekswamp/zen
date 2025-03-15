@@ -6,49 +6,25 @@ import (
 	"strings"
 )
 
-const (
-	// Dev is development environment mode
-	Dev string = "dev"
+type Environment struct {
+	value string
+}
 
-	// Pro is production environment mode
-	Pro string = "pro"
-)
-
-var (
-	_      Environment = (*environment)(nil)
-	active Environment
-	devEnv Environment = &environment{value: Dev}
-	proEnv Environment = &environment{value: Pro}
-)
-
-type (
-	Environment interface {
-		Value() string
-		IsDev() bool
-		IsPro() bool
-		t()
-	}
-
-	environment struct{ value string }
-)
-
-func Active() Environment {
+func Active() EnvironmentTypes {
 	return active
 }
 
-func (e *environment) Value() string {
+func (e *Environment) Value() string {
 	return e.value
 }
 
-func (e *environment) IsDev() bool {
+func (e *Environment) IsDev() bool {
 	return e.value == Dev
 }
 
-func (e *environment) IsPro() bool {
+func (e *Environment) IsPro() bool {
 	return e.value == Pro
 }
-
-func (e *environment) t() {}
 
 func init() {
 	env := flag.String("env", "dev", "Your environment mode (dev or pro)")
