@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"strings"
+	"testing"
 )
 
 type Environment struct {
@@ -27,8 +28,19 @@ func (e *Environment) IsPro() bool {
 }
 
 func init() {
+	if !testing.Testing() {
+		setEnvironment()
+	} else {
+		active = devEnv
+	}
+}
+
+func setEnvironment() {
 	env := flag.String("env", "dev", "Your environment mode (dev or pro)")
-	flag.Parse()
+
+	if !flag.Parsed() {
+		flag.Parse()
+	}
 
 	switch strings.ToLower(strings.TrimSpace(*env)) {
 	case Pro:
