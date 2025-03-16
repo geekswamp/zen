@@ -9,15 +9,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-type MockConfig struct {
-	mock.Mock
-}
-
-func (m *MockConfig) GetPrivKeyPath() string {
-	args := m.Called()
-	return args.String(0)
-}
-
 type MockRSAKeyProvider struct {
 	mock.Mock
 }
