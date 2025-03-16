@@ -9,11 +9,6 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-type PasswordHasher interface {
-	Generate(password []byte) (string, error)
-	Verify(password []byte, hash string) (bool, error)
-}
-
 type MockPasswordHasher struct {
 	mock.Mock
 }
