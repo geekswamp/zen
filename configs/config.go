@@ -62,9 +62,8 @@ type Config struct {
 	} `mapstructure:"password"`
 
 	JWT struct {
-		PubKeyPath  string        `mapstructure:"pub-key-path"`
-		PrivKeyPath string        `mapstructure:"priv-key-path"`
-		ExpiresAt   time.Duration `mapstructure:"expires-at"`
+		PubKeyPath  string `mapstructure:"pub-key-path"`
+		PrivKeyPath string `mapstructure:"priv-key-path"`
 	} `mapstructure:"jwt"`
 }
 

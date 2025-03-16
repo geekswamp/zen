@@ -31,4 +31,3 @@ postgres:
 jwt:
     pub-key-path:
     priv-key-path:
-    expires-at:
