@@ -105,7 +105,7 @@ func BenchmarkIsExist(b *testing.B) {
 
 	mockOS.On("Stat", "existing_file.txt").Return(mockFileInfo, nil)
 
-	for i := 0; i < b.N; i++ {
+	for b.Loop() {
 		file.IsExist("existing_file.txt")
 	}
 }
