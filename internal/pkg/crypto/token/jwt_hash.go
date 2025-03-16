@@ -4,8 +4,8 @@ import (
 	"time"
 
 	"github.com/geekswamp/zen/internal/logger"
-	"github.com/geekswamp/zen/pkg/crypto/key"
-	"github.com/geekswamp/zen/pkg/errors"
+	"github.com/geekswamp/zen/internal/pkg/crypto/key"
+	"github.com/geekswamp/zen/internal/pkg/errors"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )

@@ -7,7 +7,7 @@ import (
 
 	"github.com/geekswamp/zen/configs"
 	"github.com/geekswamp/zen/internal/logger"
-	"github.com/geekswamp/zen/pkg/errors"
+	"github.com/geekswamp/zen/internal/pkg/errors"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	gormLog "gorm.io/gorm/logger"

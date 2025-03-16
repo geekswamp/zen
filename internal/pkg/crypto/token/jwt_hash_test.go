@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/geekswamp/zen/pkg/crypto/token"
+	"github.com/geekswamp/zen/internal/pkg/crypto/token"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"

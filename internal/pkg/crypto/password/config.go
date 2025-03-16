@@ -9,7 +9,7 @@ import (
 
 	"github.com/geekswamp/zen/configs"
 	"github.com/geekswamp/zen/internal/logger"
-	"github.com/geekswamp/zen/pkg/errors"
+	"github.com/geekswamp/zen/internal/pkg/errors"
 	"golang.org/x/crypto/argon2"
 )
 

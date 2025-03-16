@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/geekswamp/zen/pkg/crypto/password"
+	"github.com/geekswamp/zen/internal/pkg/crypto/password"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
