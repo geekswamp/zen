@@ -14,4 +14,5 @@ var (
 	ErrFailedToDecodeStr         = errors.New("failed to decode string")
 	ErrInvalidToken              = errors.New("invalid token")
 	ErrNilPubKey                 = errors.New("public key is nil")
+	ErrFailedTokenParsing        = errors.New("failed parsing token")
 )
