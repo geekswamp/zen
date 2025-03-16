@@ -55,7 +55,7 @@ func loadPrivateKey(config configs.Config) (*rsa.PrivateKey, error) {
 }
 
 func loadPublicKey(config configs.Config) (*rsa.PublicKey, error) {
-	keyData, err := os.ReadFile(config.JWT.PrivKeyPath)
+	keyData, err := os.ReadFile(config.JWT.PubKeyPath)
 	if err != nil {
 		return nil, err
 	}
