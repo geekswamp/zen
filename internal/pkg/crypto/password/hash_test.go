@@ -4,7 +4,6 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/geekswamp/zen/internal/pkg/crypto/password"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -231,24 +230,4 @@ func TestDecodeHashErrors(t *testing.T) {
 	}
 
 	mockHasher.AssertExpectations(t)
-}
-
-func BenchmarkGenerate(b *testing.B) {
-	h := password.NewDefault()
-	password := []byte("benchmark-password")
-
-	for b.Loop() {
-		_, _ = h.Generate(password)
-	}
-}
-
-func BenchmarkVerify(b *testing.B) {
-	h := password.NewDefault()
-	password := []byte("benchmark-password")
-
-	hash, _ := h.Generate(password)
-
-	for b.Loop() {
-		_, _ = h.Verify(password, hash)
-	}
 }

@@ -91,21 +91,3 @@ func TestIsExist(t *testing.T) {
 		})
 	}
 }
-
-func BenchmarkIsExist(b *testing.B) {
-	mockOS := new(MockOS)
-	mockFileInfo := new(MockFileInfo)
-
-	originalStatFunc := file.StatFunc
-	defer func() { file.StatFunc = originalStatFunc }()
-
-	file.StatFunc = func(path string) (os.FileInfo, error) {
-		return mockOS.Stat(path)
-	}
-
-	mockOS.On("Stat", "existing_file.txt").Return(mockFileInfo, nil)
-
-	for b.Loop() {
-		file.IsExist("existing_file.txt")
-	}
-}

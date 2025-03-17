@@ -7,7 +7,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/geekswamp/zen/internal/pkg/crypto/token"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -172,34 +171,4 @@ func TestVerify(t *testing.T) {
 	}
 
 	mockJWT.AssertExpectations(t)
-}
-
-func BenchmarkGenerate(b *testing.B) {
-	privateKey, publicKey, err := generateTestKeys()
-	assert.NoError(b, err)
-
-	mockProvider := &MockRSAKeyProvider{privateKey: privateKey, publicKey: publicKey}
-	jwtProvider := token.New("test_issuer", "test_subject", jwt.ClaimStrings{"test_audience"}, time.Hour, mockProvider)
-
-	for b.Loop() {
-		_, _ = jwtProvider.Generate()
-	}
-}
-
-func BenchmarkVerify(b *testing.B) {
-	privateKey, publicKey, err := generateTestKeys()
-	assert.NoError(b, err)
-
-	mockProvider := &MockRSAKeyProvider{privateKey: privateKey, publicKey: publicKey}
-	jwtProvider := token.New("test_issuer", "test_subject", jwt.ClaimStrings{"test_audience"}, time.Hour, mockProvider)
-
-	token, err := jwtProvider.Generate()
-	assert.NoError(b, err)
-
-	for b.Loop() {
-		_, err := jwtProvider.Verify(token)
-		if err != nil {
-			b.Fatalf("Verify failed: %v", err)
-		}
-	}
 }

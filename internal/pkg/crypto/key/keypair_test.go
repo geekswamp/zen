@@ -50,23 +50,3 @@ func BenchmarkNewRSAKeyProvider(b *testing.B) {
 		_, _ = key.New()
 	}
 }
-
-func BenchmarkGetPrivateKey(b *testing.B) {
-	mockProvider := new(MockRSAKeyProvider)
-	mockKey := &rsa.PrivateKey{}
-	mockProvider.On("GetPrivateKey").Return(mockKey)
-
-	for b.Loop() {
-		_ = mockProvider.GetPrivateKey()
-	}
-}
-
-func BenchmarkGetPublicKey(b *testing.B) {
-	mockProvider := new(MockRSAKeyProvider)
-	mockKey := &rsa.PublicKey{}
-	mockProvider.On("GetPublicKey").Return(mockKey)
-
-	for b.Loop() {
-		_ = mockProvider.GetPublicKey()
-	}
-}
