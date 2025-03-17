@@ -1,7 +1,6 @@
 package password
 
 import (
-	"crypto/rand"
 	"crypto/subtle"
 	"encoding/base64"
 	"fmt"
@@ -9,6 +8,7 @@ import (
 
 	"github.com/geekswamp/zen/configs"
 	"github.com/geekswamp/zen/internal/logger"
+	"github.com/geekswamp/zen/internal/pkg/crypto/rand"
 	"github.com/geekswamp/zen/internal/pkg/errors"
 	"golang.org/x/crypto/argon2"
 )
@@ -49,7 +49,7 @@ func NewDefault() Hash {
 func (a *Config) Generate(text []byte) (hash string, err error) {
 	pepperedText := append(text, []byte(a.pepper)...)
 
-	salt, err := generateRandomBytes(a.saltLength)
+	salt, err := rand.GenerateRandomBytes(a.saltLength)
 	if err != nil {
 		log.Error(errors.ErrFailedGenRandomBytes.Error(), logger.ErrDetails(err))
 		return "", errors.ErrFailedGenRandomBytes
@@ -79,16 +79,6 @@ func (a *Config) Verify(text []byte, hash string) (bool, error) {
 	}
 
 	return false, nil
-}
-
-func generateRandomBytes(n uint32) ([]byte, error) {
-	b := make([]byte, n)
-	_, err := rand.Read(b)
-	if err != nil {
-		return nil, err
-	}
-
-	return b, nil
 }
 
 func decodeHash(encodedHash string) (ph *Config, salt, b []byte, err error) {
