@@ -1,8 +1,8 @@
 package seeder
 
 import (
+	"github.com/geekswamp/zen/internal/errors"
 	"github.com/geekswamp/zen/internal/logger"
-	"github.com/geekswamp/zen/internal/pkg/errors"
 	"gorm.io/gorm"
 )
 
