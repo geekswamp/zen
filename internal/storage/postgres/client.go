@@ -40,15 +40,6 @@ func (d *Client) Connect() (db *gorm.DB, err error) {
 	return d.db, nil
 }
 
-func (d *Client) Close() error {
-	sqlDB, err := d.db.DB()
-	if err != nil {
-		return err
-	}
-
-	return sqlDB.Close()
-}
-
 func buildDsn(config configs.Config) string {
 	q := url.Values{}
 	p := config.Postgres
