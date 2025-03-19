@@ -17,6 +17,6 @@ type ID uuid.UUID
 type Model struct {
 	ID        ID         `json:"id" gorm:"primaryKey;type:uuid;default:uuid_generate_v4()"`
 	CreatedAt time.Time  `json:"created_at" gorm:"autoCreateTime"`
-	UpdatedAt time.Time  `json:"updated_at" gorm:"autoUpdateTime"`
+	UpdatedAt *time.Time `json:"updated_at" gorm:"autoUpdateTime"`
 	DeletedAt *time.Time `json:"deleted_at" gorm:"index"`
 }
