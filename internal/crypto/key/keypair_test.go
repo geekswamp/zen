@@ -4,7 +4,7 @@ import (
 	"crypto/rsa"
 	"testing"
 
-	"github.com/geekswamp/zen/internal/pkg/crypto/key"
+	"github.com/geekswamp/zen/internal/crypto/key"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 )

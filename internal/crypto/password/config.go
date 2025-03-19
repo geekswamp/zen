@@ -7,9 +7,9 @@ import (
 	"strings"
 
 	"github.com/geekswamp/zen/configs"
+	"github.com/geekswamp/zen/internal/crypto/rand"
+	"github.com/geekswamp/zen/internal/errors"
 	"github.com/geekswamp/zen/internal/logger"
-	"github.com/geekswamp/zen/internal/pkg/crypto/rand"
-	"github.com/geekswamp/zen/internal/pkg/errors"
 	"golang.org/x/crypto/argon2"
 )
 
