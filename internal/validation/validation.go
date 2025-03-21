@@ -74,7 +74,8 @@ func ValidateBody[T any](c *gin.Context) (*T, any) {
 }
 
 func validateStruct(body any) *http.Error {
-	var code, msg string
+	var code http.Errno
+	var msg string
 
 	if err := validate.Struct(body); err != nil {
 		var validationErrs validator.ValidationErrors

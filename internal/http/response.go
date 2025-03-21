@@ -20,7 +20,7 @@ type Response struct {
 
 // Error represents a standard error response structure.
 type Error struct {
-	Code   string `json:"code"`
+	Code   Errno  `json:"code"`
 	Reason string `json:"reason"`
 }
 
@@ -78,7 +78,8 @@ func (b BaseResponse) Error(c *gin.Context, errParams any) {
 		b.BadRequest(c, err)
 
 	case error:
-		var code, msg string
+		var code Errno
+		var msg string
 		var httpCode int
 
 		switch {
