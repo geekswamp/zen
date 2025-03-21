@@ -83,12 +83,12 @@ func (b BaseResponse) Error(c *gin.Context, errParams any) {
 
 		switch {
 		case err == io.EOF:
-			code = SYSNotValidJSON
+			code = NotValidJSON
 			msg = Text(code)
 			httpCode = http.StatusBadRequest
 
 		default:
-			code = SYSSystemError
+			code = SystemError
 			msg = Text(code)
 			httpCode = http.StatusInternalServerError
 		}

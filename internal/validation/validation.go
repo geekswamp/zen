@@ -46,7 +46,7 @@ func init() {
 func ValidateQuery[T any](c *gin.Context) (*T, any) {
 	query := new(T)
 	if err := c.ShouldBindQuery(query); err != nil {
-		return nil, http.Error{Code: http.PANotValidQuery, Reason: err.Error()}
+		return nil, http.Error{Code: http.NotValidQuery, Reason: err.Error()}
 	}
 
 	if err := validateStruct(query); err != nil {
@@ -61,7 +61,7 @@ func ValidateBody[T any](c *gin.Context) (*T, any) {
 	body := new(T)
 
 	if err := c.ShouldBindJSON(body); err != nil {
-		code := http.PANotValidJSONFormat
+		code := http.NotValidJSONFormat
 		errStr := err.Error()
 		return nil, http.Error{Code: code, Reason: errStr}
 	}
@@ -80,13 +80,13 @@ func validateStruct(body any) *http.Error {
 		var validationErrs validator.ValidationErrors
 		if errors2.As(err, &validationErrs) {
 			firstErr := validationErrs[0]
-			code = http.PAInputNotValid
+			code = http.InputNotValid
 			msg = firstErr.Translate(trans)
 
 			return &http.Error{Code: code, Reason: msg}
 		}
 
-		code = http.PANotValidJSONFormat
+		code = http.NotValidJSONFormat
 		msg = err.Error()
 
 		return &http.Error{Code: code, Reason: msg}
