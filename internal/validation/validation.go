@@ -46,13 +46,11 @@ func init() {
 func ValidateQuery[T any](c *gin.Context) (*T, any) {
 	query := new(T)
 	if err := c.ShouldBindQuery(query); err != nil {
-		code := http.PANotValidQuery
-		errStr := err.Error()
-		return nil, []http.Error{{Code: &code, Reason: &errStr}}
+		return nil, http.Error{Code: http.PANotValidQuery, Reason: err.Error()}
 	}
 
-	if errs := validateStruct(query); errs != nil {
-		return nil, errs
+	if err := validateStruct(query); err != nil {
+		return nil, err
 	}
 
 	return query, nil
@@ -65,34 +63,34 @@ func ValidateBody[T any](c *gin.Context) (*T, any) {
 	if err := c.ShouldBindJSON(body); err != nil {
 		code := http.PANotValidJSONFormat
 		errStr := err.Error()
-		return nil, []http.Error{{Code: &code, Reason: &errStr}}
+		return nil, http.Error{Code: code, Reason: errStr}
 	}
 
-	if errs := validateStruct(body); errs != nil {
-		return nil, errs
+	if err := validateStruct(body); err != nil {
+		return nil, err
 	}
 
 	return body, nil
 }
 
-func validateStruct(body any) []http.Error {
-	var errs []http.Error
+func validateStruct(body any) *http.Error {
 	var code, msg string
 
 	if err := validate.Struct(body); err != nil {
 		var validationErrs validator.ValidationErrors
 		if errors2.As(err, &validationErrs) {
-			for _, e := range validationErrs {
-				code = http.PAInputNotValid
-				msg = e.Translate(trans)
-				errs = append(errs, http.Error{Code: &code, Reason: &msg})
-			}
-		} else {
+			firstErr := validationErrs[0]
 			code = http.PAInputNotValid
-			msg = err.Error()
-			errs = append(errs, http.Error{Code: &code, Reason: &msg})
+			msg = firstErr.Translate(trans)
+
+			return &http.Error{Code: code, Reason: msg}
 		}
+
+		code = http.PANotValidJSONFormat
+		msg = err.Error()
+
+		return &http.Error{Code: code, Reason: msg}
 	}
 
-	return errs
+	return nil
 }

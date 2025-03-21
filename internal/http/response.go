@@ -13,15 +13,15 @@ type BaseResponse struct{}
 
 // Response represents a standardized API response structure.
 type Response struct {
-	RequestID string  `json:"request_id"`
-	Errors    []Error `json:"errors"`
-	Result    any     `json:"result"`
+	RequestID string `json:"request_id"`
+	Error     *Error `json:"error"`
+	Result    any    `json:"result"`
 }
 
 // Error represents a standard error response structure.
 type Error struct {
-	Code   *string `json:"code"`
-	Reason *string `json:"reason"`
+	Code   string `json:"code"`
+	Reason string `json:"reason"`
 }
 
 // Entries represents a paginated collection of items of type T.
@@ -33,8 +33,8 @@ type Entries[T any] struct {
 }
 
 // New creates and sends a JSON response using the provided gin.Context.
-func New(c *gin.Context, httpCode int, message, errors []Error, data any) {
-	newResponse(c, httpCode, errors, data)
+func New(c *gin.Context, httpCode int, message, err *Error, data any) {
+	newResponse(c, httpCode, err, data)
 }
 
 // NewEntries creates a new Entries instance with pagination metadata.
@@ -49,17 +49,17 @@ func NewEntries[T any](entries []T, totalItems, totalPages int64, hasReachedMax 
 
 // Success sends a JSON response with HTTP 200 Ok status code.
 func (b BaseResponse) Success(c *gin.Context, data any) {
-	newResponse(c, http.StatusOK, []Error{}, data)
+	newResponse(c, http.StatusOK, nil, data)
 }
 
 // BadRequest sends a JSON response with HTTP 400 Bad Request status code.
-func (b BaseResponse) BadRequest(c *gin.Context, errors []Error) {
-	newResponse(c, http.StatusBadRequest, errors, nil)
+func (b BaseResponse) BadRequest(c *gin.Context, err Error) {
+	newResponse(c, http.StatusBadRequest, &err, nil)
 }
 
 // Unauthorized sends a JSON response with HTTP 401 Unauthorized status code.
-func (b BaseResponse) Unauthorized(c *gin.Context, errors []Error) {
-	newResponse(c, http.StatusUnauthorized, errors, nil)
+func (b BaseResponse) Unauthorized(c *gin.Context, err Error) {
+	newResponse(c, http.StatusUnauthorized, &err, nil)
 }
 
 // TMR sends a JSON response with HTTP 429 Too Many Requests status code.
@@ -67,17 +67,17 @@ func (b BaseResponse) TMR(c *gin.Context) {
 	code := TooManyReqs
 	msg := Text(code)
 
-	newResponse(c, http.StatusTooManyRequests, []Error{{Code: &code, Reason: &msg}}, nil)
+	newResponse(c, http.StatusTooManyRequests, &Error{Code: code, Reason: msg}, nil)
 }
 
 // ISE sends a JSON response with HTTP 500 Internal Server Error status code.
-func (b BaseResponse) ISE(c *gin.Context, errors []Error) {
-	newResponse(c, http.StatusInternalServerError, errors, nil)
+func (b BaseResponse) ISE(c *gin.Context, err *Error) {
+	newResponse(c, http.StatusInternalServerError, err, nil)
 }
 
 func (b BaseResponse) Error(c *gin.Context, errParams any) {
 	switch err := errParams.(type) {
-	case []Error:
+	case Error:
 		b.BadRequest(c, err)
 
 	case error:
@@ -96,19 +96,12 @@ func (b BaseResponse) Error(c *gin.Context, errParams any) {
 			httpCode = http.StatusInternalServerError
 		}
 
-		newResponse(c, httpCode, []Error{{
-			Code:   &code,
-			Reason: &msg,
-		}}, nil)
+		newResponse(c, httpCode, &Error{Code: code, Reason: msg}, nil)
 	}
 }
 
-func newResponse(c *gin.Context, code int, errors []Error, data any) {
+func newResponse(c *gin.Context, code int, err *Error, data any) {
 	ctx := core.NewContext(c)
 
-	c.JSON(code, Response{
-		RequestID: *ctx.GetRequestID(),
-		Errors:    errors,
-		Result:    data,
-	})
+	c.JSON(code, Response{RequestID: *ctx.GetRequestID(), Error: err, Result: data})
 }
