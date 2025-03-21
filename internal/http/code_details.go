@@ -1,8 +1,6 @@
 package http
 
-type codeMap map[string]string
-
-var text = codeMap{
+var text = map[Errno]string{
 	TooManyReqs:        "Too many requests, please try again later",
 	NotValidJSONFormat: "Payload not valid JSON format",
 	InputNotValid:      "The provided input is not valid",
