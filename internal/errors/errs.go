@@ -7,6 +7,7 @@ var (
 	ErrFailedToConnectDB         = errors.New("failed to connect to database")
 	ErrFailedLoadLocal           = errors.New("failed to load local timezone")
 	ErrInvalidHashFormat         = errors.New("invalid hash format")
+	ErrPasswordTooShort          = errors.New("password too short")
 	ErrIncompatibleArgon2Version = errors.New("incompatible Argon2 version")
 	ErrFailedToDecodeHash        = errors.New("failed to decode hash")
 	ErrFailedToSignToken         = errors.New("failed to sign token")
@@ -16,4 +17,5 @@ var (
 	ErrNilPubKey                 = errors.New("public key is nil")
 	ErrFailedTokenParsing        = errors.New("failed parsing token")
 	ErrFailedRunningSeeder       = errors.New("failed running seeder")
+	ErrValidatorTrans            = errors.New("error validator translation")
 )
