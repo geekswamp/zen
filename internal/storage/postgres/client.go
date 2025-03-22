@@ -11,7 +11,6 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	gormLog "gorm.io/gorm/logger"
-	"gorm.io/gorm/schema"
 )
 
 type Client struct {
@@ -70,9 +69,6 @@ func connect(config configs.Config) (*gorm.DB, error) {
 
 	db, err := gorm.Open(postgres.Open(buildDsn(config)), &gorm.Config{
 		Logger: gormLog.Default.LogMode(logMode),
-		NamingStrategy: schema.NamingStrategy{
-			SingularTable: true,
-		},
 		NowFunc: func() time.Time {
 			loc, err := time.LoadLocation(p.Timezone)
 			if err != nil {
