@@ -18,4 +18,5 @@ var (
 	ErrFailedTokenParsing        = errors.New("failed parsing token")
 	ErrFailedRunningSeeder       = errors.New("failed running seeder")
 	ErrValidatorTrans            = errors.New("error validator translation")
+	ErrInvalidErrCode            = errors.New("error code does not exist, please change one")
 )
