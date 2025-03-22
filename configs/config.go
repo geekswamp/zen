@@ -28,6 +28,7 @@ var (
 type Config struct {
 	App struct {
 		Name string `mapstructure:"name"`
+		Mode string `mapstructure:"mode"` // debug or release
 		Host string `mapstructure:"host"`
 		Port uint32 `mapstructure:"port"`
 	} `mapstructure:"app"`

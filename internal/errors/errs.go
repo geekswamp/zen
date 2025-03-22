@@ -19,4 +19,5 @@ var (
 	ErrFailedRunningSeeder       = errors.New("failed running seeder")
 	ErrValidatorTrans            = errors.New("error validator translation")
 	ErrInvalidErrCode            = errors.New("error code does not exist, please change one")
+	ErrInvalidMode               = errors.New("the 'mode' only supports 'debug' and 'release'. Please update your config file accordingly")
 )

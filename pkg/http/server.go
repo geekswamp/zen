@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/geekswamp/zen/internal/errors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,13 +18,15 @@ type Server interface {
 
 type Config struct {
 	*http.Server
+	mode        string
 	middlewares []gin.HandlerFunc
 	router      Router
 }
 
-func New(addr string, router Router) Server {
+func New(addr, mode string, router Router) Server {
 	config := &Config{
 		Server: &http.Server{Addr: addr},
+		mode:   mode,
 		router: router,
 	}
 
@@ -50,6 +53,16 @@ func (c *Config) Stop() error {
 
 func (c *Config) handler() *gin.Engine {
 	server := gin.New()
+
+	switch c.mode {
+	case "debug":
+		gin.SetMode(gin.DebugMode)
+	case "release":
+		gin.SetMode(gin.ReleaseMode)
+	default:
+		panic(errors.ErrInvalidMode)
+	}
+
 	server.Use(c.middlewares...)
 	c.router(server)
 
