@@ -57,11 +57,19 @@ func buildDsn(config configs.Config) string {
 }
 
 func connect(config configs.Config) (*gorm.DB, error) {
+	var logMode gormLog.LogLevel
+
 	p := config.Postgres
 	base := p.Base
 
+	if config.App.Mode == "debug" {
+		logMode = gormLog.Info
+	} else {
+		logMode = gormLog.Silent
+	}
+
 	db, err := gorm.Open(postgres.Open(buildDsn(config)), &gorm.Config{
-		Logger: gormLog.Default.LogMode(gormLog.Silent),
+		Logger: gormLog.Default.LogMode(logMode),
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true,
 		},
