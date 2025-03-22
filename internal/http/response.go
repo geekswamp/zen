@@ -64,7 +64,7 @@ func (b BaseResponse) Unauthorized(c *gin.Context, err Error) {
 
 // TMR sends a JSON response with HTTP 429 Too Many Requests status code.
 func (b BaseResponse) TMR(c *gin.Context) {
-	newResponse(c, http.StatusTooManyRequests, &Error{Code: TooManyReqs, Reason: Text(TooManyReqs)}, nil)
+	newResponse(c, http.StatusTooManyRequests, &Error{Code: TooManyReqs.Code(), Reason: TooManyReqs.Detail()}, nil)
 }
 
 // ISE sends a JSON response with HTTP 500 Internal Server Error status code.
@@ -84,13 +84,13 @@ func (b BaseResponse) Error(c *gin.Context, errParams any) {
 
 		switch {
 		case err == io.EOF:
-			code = NotValidJSON
-			msg = Text(code)
+			code = NotValidJSONFormat.Code()
+			msg = NotValidJSONFormat.Detail()
 			httpCode = http.StatusBadRequest
 
 		default:
-			code = SystemError
-			msg = Text(code)
+			code = SystemError.Code()
+			msg = SystemError.Detail()
 			httpCode = http.StatusInternalServerError
 		}
 
