@@ -6,10 +6,29 @@ import (
 	"text/template"
 
 	"github.com/geekswamp/genz/internal/format"
+	"golang.org/x/mod/modfile"
 )
 
+func (m Make) GetModuleName() (*string, error) {
+	data, err := os.ReadFile("go.mod")
+	if err != nil {
+		return nil, err
+	}
+
+	modFile, err := modfile.Parse("go.mod", data, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	if modFile.Module == nil {
+		return nil, err
+	}
+
+	return &modFile.Module.Mod.Path, nil
+}
+
 func (m Make) Parse(file *os.File) error {
-	tmplFile := fmt.Sprintf("%s.tmpl", m.fileType)
+	tmplFile := fmt.Sprintf("%s.tmpl", m.FileType)
 
 	funcMap := template.FuncMap{
 		"ToCamelCase": func(text string) string {
@@ -25,8 +44,14 @@ func (m Make) Parse(file *os.File) error {
 		return err
 	}
 
+	modName, err := m.GetModuleName()
+	if err != nil {
+		return err
+	}
+
 	data := map[string]any{
-		"StructName": m.featureName,
+		"Module":     modName,
+		"StructName": m.FeatureName,
 	}
 
 	if err := t.Execute(file, data); err != nil {
