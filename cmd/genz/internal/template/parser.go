@@ -5,7 +5,7 @@ import (
 	"os"
 	"text/template"
 
-	"github.com/geekswamp/genz/pkg/format"
+	"github.com/geekswamp/genz/internal/format"
 )
 
 func (m Make) Parse(file *os.File) error {
