@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/geekswamp/zen/cmd/genz/internal/command/create"
+	"github.com/geekswamp/genz/internal/command/create"
 	"github.com/spf13/cobra"
 )
 

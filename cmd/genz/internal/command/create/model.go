@@ -1,7 +1,7 @@
 package create
 
 import (
-	"github.com/geekswamp/zen/cmd/genz/internal/template"
+	"github.com/geekswamp/genz/internal/template"
 	"github.com/spf13/cobra"
 )
 

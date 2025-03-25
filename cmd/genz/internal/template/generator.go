@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/geekswamp/zen/cmd/genz/internal/format"
+	"github.com/geekswamp/genz/internal/format"
 )
 
 func (m Make) Generate() error {
