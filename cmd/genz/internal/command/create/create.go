@@ -2,6 +2,8 @@ package create
 
 import "github.com/spf13/cobra"
 
+var dir string
+
 var CreateCmd = &cobra.Command{
 	Use:        "create [type]",
 	Short:      "Create a new handler, repository, route or model.",
@@ -11,5 +13,5 @@ var CreateCmd = &cobra.Command{
 }
 
 func init() {
-	CreateCmd.AddCommand(modelCmd)
+	CreateCmd.AddCommand(modelCmd, repoCmd)
 }
