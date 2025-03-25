@@ -1,8 +1,6 @@
 package create
 
 import (
-	"fmt"
-
 	"github.com/geekswamp/genz/internal/template"
 	"github.com/spf13/cobra"
 )
@@ -25,12 +23,11 @@ func runE(_ *cobra.Command, args []string) error {
 	m := new(template.Make)
 	m.FeatureName = args[0]
 	m.FileType = template.Model
-	defaultDir := fmt.Sprintf("%s/%s", template.ModelPath, m.FeatureName)
 
 	if dir != "" {
 		m.FilePath = template.FilePath(dir)
 	} else {
-		m.FilePath = template.FilePath(defaultDir)
+		m.FilePath = template.ModelPath
 	}
 
 	err := m.Generate()
