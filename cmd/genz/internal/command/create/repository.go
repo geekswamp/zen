@@ -18,18 +18,17 @@ func init() {
 }
 
 func runRepoE(_ *cobra.Command, args []string) error {
-	m := new(template.Make)
-	m.FeatureName = args[0]
-	m.FileType = template.Repository
-	m.SuffixFile = template.RepoSuffix
+	tm.FeatureName = args[0]
+	tm.FileType = template.Repository
+	tm.SuffixFile = template.RepoSuffix
 
 	if dir != "" {
-		m.FilePath = template.FilePath(dir)
+		tm.FilePath = template.FilePath(dir)
 	} else {
-		m.FilePath = template.RepositoryPath
+		tm.FilePath = template.RepositoryPath
 	}
 
-	err := m.Generate()
+	err := tm.Generate()
 	if err != nil {
 		return err
 	}

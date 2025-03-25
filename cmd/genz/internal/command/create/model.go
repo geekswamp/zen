@@ -18,17 +18,16 @@ func init() {
 }
 
 func runModelE(_ *cobra.Command, args []string) error {
-	m := new(template.Make)
-	m.FeatureName = args[0]
-	m.FileType = template.Model
+	tm.FeatureName = args[0]
+	tm.FileType = template.Model
 
 	if dir != "" {
-		m.FilePath = template.FilePath(dir)
+		tm.FilePath = template.FilePath(dir)
 	} else {
-		m.FilePath = template.ModelPath
+		tm.FilePath = template.ModelPath
 	}
 
-	err := m.Generate()
+	err := tm.Generate()
 	if err != nil {
 		return err
 	}

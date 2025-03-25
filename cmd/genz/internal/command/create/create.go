@@ -1,8 +1,14 @@
 package create
 
-import "github.com/spf13/cobra"
+import (
+	"github.com/geekswamp/zen/cmd/genz/internal/template"
+	"github.com/spf13/cobra"
+)
 
-var dir string
+var (
+	dir string
+	tm  = new(template.Make)
+)
 
 var CreateCmd = &cobra.Command{
 	Use:        "create [type]",
