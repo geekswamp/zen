@@ -1,8 +1,8 @@
 package template
 
 type fileType string
-
 type FilePath string
+type suffix string
 
 const (
 	Repository fileType = "repository"
@@ -14,12 +14,20 @@ const (
 
 const (
 	_Internal               = "internal"
-	RepositoryPath FilePath = "repository"
+	RepositoryPath FilePath = _Internal + "/repository"
 	ModelPath      FilePath = _Internal + "/model"
+)
+
+const (
+	RepoSuffix    suffix = "_repository"
+	RouterSuffix  suffix = "_router"
+	ServiceSuffix suffix = "_service"
+	HandlerSuffix suffix = "_handler"
 )
 
 type Make struct {
 	FilePath    FilePath
 	FileType    fileType
+	SuffixFile  suffix
 	FeatureName string
 }

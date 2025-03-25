@@ -10,7 +10,7 @@ import (
 )
 
 func (m Make) Generate() error {
-	path := filepath.Join(filepath.Clean(string(m.FilePath)), format.ToSnakeCase(string(m.FeatureName))+".go")
+	path := filepath.Join(filepath.Clean(string(m.FilePath)), format.ToSnakeCase(string(m.FeatureName))+string(m.SuffixFile)+".go")
 	dir := filepath.Dir(path)
 
 	if _, err := os.Stat(path); err == nil {
