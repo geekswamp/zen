@@ -9,6 +9,7 @@ require (
 )
 
 require (
+	github.com/geekswamp/zen v0.0.0-20250325050331-556c0ac584ba
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.6 // indirect
 )

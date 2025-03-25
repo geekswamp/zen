@@ -4,14 +4,15 @@ import (
 	"errors"
 	"os"
 
+	"github.com/geekswamp/zen/pkg/file"
 	"golang.org/x/mod/modfile"
 )
 
 var mod = "go.mod"
 
 func IsExist() bool {
-	_, err := os.Stat(mod)
-	return err == nil || os.IsExist(err)
+	_, exist := file.IsExist(mod)
+	return exist
 }
 
 func GetModuleName() (*string, error) {
