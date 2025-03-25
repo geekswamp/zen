@@ -1,4 +1,4 @@
-module github.com/geekswamp/genz
+module github.com/geekswamp/zen/cmd/genz
 
 go 1.24.1
 
