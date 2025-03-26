@@ -12,10 +12,10 @@ var (
 
 var CreateCmd = &cobra.Command{
 	Use:        "create [type]",
-	Short:      "Create a new handler, repository, route or model.",
+	Short:      "Create a new handler, repository, route, service or model.",
 	Args:       cobra.ExactArgs(1),
 	SuggestFor: []string{"creat", "craete"},
-	ValidArgs:  []string{"handler", "repo", "route", "model"},
+	ValidArgs:  []string{"handler", "repo", "route", "model", "service"},
 }
 
 func init() {
