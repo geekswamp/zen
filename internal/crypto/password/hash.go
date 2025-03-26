@@ -40,16 +40,14 @@ func New(pepper string, memory, iterations, saltLength, keyLength uint32, parall
 	}
 }
 
-func NewFromConfig() Config {
-	cfg := configs.Get().Password
-
+func NewFromConfig(config configs.Config) Config {
 	return Config{
-		pepper:      cfg.Pepper,
-		memory:      cfg.Argon2.Memory,
-		iterations:  cfg.Argon2.Iterations,
-		parallelism: cfg.Argon2.Parallelism,
-		saltLength:  cfg.Argon2.SaltLength,
-		keyLength:   cfg.Argon2.KeyLength,
+		pepper:      config.Password.Pepper,
+		memory:      config.Password.Argon2.Memory,
+		iterations:  config.Password.Argon2.Iterations,
+		parallelism: config.Password.Argon2.Parallelism,
+		saltLength:  config.Password.Argon2.SaltLength,
+		keyLength:   config.Password.Argon2.KeyLength,
 	}
 }
 
