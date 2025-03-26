@@ -15,34 +15,34 @@ type {{ ToPascalCase .StructName }}Repository interface {
   Delete(id uuid.UUID) error
 }
 
-type {{ ToPascalCase .StructName }}Resource struct{ repo base.Repository }
+type {{ ToPascalCase .StructName }}QueryBuilder struct{ repo base.Repository }
 
 func New(repo base.Repository) {{ ToPascalCase .StructName }}Repository {
-  return {{ ToPascalCase .StructName }}Resource{repo: repo}
+  return {{ ToPascalCase .StructName }}QueryBuilder{repo: repo}
 }
 
-func (r {{ ToPascalCase .StructName }}Resource) Create({{ ToCamelCase .StructName }} model.{{ ToPascalCase .StructName }}) error {
-  return r.repo.DB().Create(&{{ ToCamelCase .StructName }}).Error
+func (q {{ ToPascalCase .StructName }}QueryBuilder) Create({{ ToCamelCase .StructName }} model.{{ ToPascalCase .StructName }}) error {
+  return q.repo.DB().Create(&{{ ToCamelCase .StructName }}).Error
 }
 
-func (r {{ ToPascalCase .StructName }}Resource) FindByID(id uuid.UUID) (*model.{{ ToPascalCase .StructName }}, error) {
+func (q {{ ToPascalCase .StructName }}QueryBuilder) FindByID(id uuid.UUID) (*model.{{ ToPascalCase .StructName }}, error) {
   {{ ToCamelCase .StructName }} := model.{{ ToPascalCase .StructName }}{}
-  if err := r.repo.DB().First({{ ToCamelCase .StructName }}, id).Error; err != nil {
+  if err := q.repo.DB().First({{ ToCamelCase .StructName }}, id).Error; err != nil {
     return nil, err
   }
 
   return &{{ ToCamelCase .StructName }}, nil
 }
 
-func (r {{ ToPascalCase .StructName }}Resource) Update(id uuid.UUID, {{ ToCamelCase .StructName }}Map map[string]any) error {
-  {{ ToCamelCase .StructName }}, err := r.FindByID(id)
+func (q {{ ToPascalCase .StructName }}QueryBuilder) Update(id uuid.UUID, {{ ToCamelCase .StructName }}Map map[string]any) error {
+  {{ ToCamelCase .StructName }}, err := q.FindByID(id)
   if err != nil {
     return err
   }
 
-  return r.repo.DB().Model(&{{ ToCamelCase .StructName }}).Updates({{ ToCamelCase .StructName }}Map).Error
+  return q.repo.DB().Model({{ ToCamelCase .StructName }}).Updates({{ ToCamelCase .StructName }}Map).Error
 }
 
-func (r {{ ToPascalCase .StructName }}Resource) Delete(id uuid.UUID) error {
-  return r.repo.DB().Delete(model.{{ ToPascalCase .StructName }}{}, id).Error
+func (q {{ ToPascalCase .StructName }}QueryBuilder) Delete(id uuid.UUID) error {
+  return q.repo.DB().Delete(model.{{ ToPascalCase .StructName }}{}, id).Error
 }
