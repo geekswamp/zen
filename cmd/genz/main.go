@@ -20,10 +20,6 @@ func init() {
 
 func main() {
 	if err := mainCmd.Execute(); err != nil {
-		err := mainCmd.Help()
-		if err != nil {
-			panic(err)
-		}
 		os.Exit(1)
 	}
 }
