@@ -11,7 +11,7 @@ import (
 type {{ ToPascalCase .StructName }}Repository interface {
   Create({{ ToCamelCase .StructName }} model.{{ ToPascalCase .StructName }}) error
   FindByID(id uuid.UUID) (*model.{{ ToPascalCase .StructName }}, error)
-  Update(id uuid.UUID, {{ ToCamelCase .StructName }}Map map[string]any) error
+  Update(id uuid.UUID, {{ ToCamelCase .StructName }}Map base.UpdateMap) error
   Delete(id uuid.UUID) error
 }
 
@@ -34,7 +34,7 @@ func (q {{ ToPascalCase .StructName }}QueryBuilder) FindByID(id uuid.UUID) (*mod
   return &{{ ToCamelCase .StructName }}, nil
 }
 
-func (q {{ ToPascalCase .StructName }}QueryBuilder) Update(id uuid.UUID, {{ ToCamelCase .StructName }}Map map[string]any) error {
+func (q {{ ToPascalCase .StructName }}QueryBuilder) Update(id uuid.UUID, {{ ToCamelCase .StructName }}Map base.UpdateMap) error {
   {{ ToCamelCase .StructName }}, err := q.FindByID(id)
   if err != nil {
     return err
