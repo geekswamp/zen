@@ -2,9 +2,11 @@ package base
 
 import "gorm.io/gorm"
 
+type UpdateMap map[string]any
+
 type Repository struct{ db *gorm.DB }
 
-func New(db *gorm.DB) Repository {
+func NewRepo(db *gorm.DB) Repository {
 	return Repository{db: db}
 }
 
