@@ -47,6 +47,11 @@ func NewEntries[T any](entries []T, totalItems, totalPages int64, hasReachedMax 
 	}
 }
 
+// Created sends a JSON response with HTTP 201 Created status code.
+func (b BaseResponse) Created(c *gin.Context, data any) {
+	newResponse(c, http.StatusCreated, nil, data)
+}
+
 // Success sends a JSON response with HTTP 200 Ok status code.
 func (b BaseResponse) Success(c *gin.Context, data any) {
 	newResponse(c, http.StatusOK, nil, data)
