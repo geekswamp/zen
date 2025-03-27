@@ -6,7 +6,7 @@ import (
 )
 
 var modelCmd = &cobra.Command{
-	Use:     "model <name> [-d dir]",
+	Use:     "model <name>",
 	Short:   "Create a new model.",
 	Args:    cobra.MinimumNArgs(1),
 	Example: "genz create model user",
@@ -14,7 +14,7 @@ var modelCmd = &cobra.Command{
 }
 
 func init() {
-	modelCmd.Flags().StringVarP(&dir, "dir", "d", "", "Specify the model directory")
+	modelCmd.Flags().StringVarP(&dir, "dir", "d", "", "Specify the model directory.")
 }
 
 func runModelE(_ *cobra.Command, args []string) error {
@@ -27,8 +27,7 @@ func runModelE(_ *cobra.Command, args []string) error {
 		tm.FilePath = template.ModelPath
 	}
 
-	err := tm.Generate()
-	if err != nil {
+	if err := tm.Generate(); err != nil {
 		return err
 	}
 

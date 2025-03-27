@@ -6,15 +6,15 @@ import (
 )
 
 var repoCmd = &cobra.Command{
-	Use:     "repo <name> [-d dir]",
-	Short:   "Create a new repository",
+	Use:     "repo <name>",
+	Short:   "Create a new repository.",
 	Args:    cobra.MinimumNArgs(1),
 	Example: "genz create repo user",
 	RunE:    runRepoE,
 }
 
 func init() {
-	repoCmd.Flags().StringVarP(&dir, "dir", "d", "", "Specify the repository directory")
+	repoCmd.Flags().StringVarP(&dir, "dir", "d", "", "Specify the repository directory.")
 }
 
 func runRepoE(_ *cobra.Command, args []string) error {
@@ -28,8 +28,7 @@ func runRepoE(_ *cobra.Command, args []string) error {
 		tm.FilePath = template.RepositoryPath
 	}
 
-	err := tm.Generate()
-	if err != nil {
+	if err := tm.Generate(); err != nil {
 		return err
 	}
 
