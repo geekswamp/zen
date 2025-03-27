@@ -61,5 +61,5 @@ func (s UserServiceRepo) Delete(id uuid.UUID) error {
 }
 
 func (s UserServiceRepo) SoftDelete(id uuid.UUID) error {
-	return s.Update(id, map[string]any{"Active": false, "DeletedTime": time.Now().Local().UnixMilli()})
+	return s.Update(id, base.UpdateMap{"Active": false, "DeletedTime": time.Now().Local().UnixMilli()})
 }
