@@ -17,7 +17,7 @@ type {{ ToPascalCase .StructName }}Repository interface {
 
 type {{ ToPascalCase .StructName }}QueryBuilder struct{ repo base.Repository }
 
-func New(repo base.Repository) {{ ToPascalCase .StructName }}Repository {
+func NewRepo(repo base.Repository) {{ ToPascalCase .StructName }}Repository {
   return {{ ToPascalCase .StructName }}QueryBuilder{repo: repo}
 }
 

@@ -22,7 +22,7 @@ type {{ ToPascalCase .StructName }}ServiceRepo struct {
 	repo repository.{{ ToPascalCase .StructName }}Repository
 }
 
-func New(repo repository.{{ ToPascalCase .StructName }}Repository) {{ ToPascalCase .StructName }}Service {
+func NewRepo(repo repository.{{ ToPascalCase .StructName }}Repository) {{ ToPascalCase .StructName }}Service {
 	return {{ ToPascalCase .StructName }}ServiceRepo{repo: repo}
 }
 
