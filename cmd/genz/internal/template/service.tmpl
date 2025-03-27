@@ -5,7 +5,7 @@ package service
 import (
 	"time"
 
-	"{{ .Module }}/configs"
+	"{{ .Module }}/internal/base"
 	"{{ .Module }}/internal/model"
 	"{{ .Module }}/internal/repository"
 	"github.com/google/uuid"
@@ -45,5 +45,5 @@ func (s {{ ToPascalCase .StructName }}ServiceRepo) Delete(id uuid.UUID) error {
 }
 
 func (s {{ ToPascalCase .StructName }}ServiceRepo) SoftDelete(id uuid.UUID) error {
-	return s.Update(id, map[string]any{"DeletedTime": time.Now().Local().UnixMilli()})
+	return s.Update(id, base.UpdateMap{"DeletedTime": time.Now().Local().UnixMilli()})
 }
