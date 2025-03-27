@@ -16,6 +16,7 @@ const (
 	_Internal               = "internal"
 	RepositoryPath FilePath = _Internal + "/repository"
 	ModelPath      FilePath = _Internal + "/model"
+	ServicePath    FilePath = _Internal + "/service"
 )
 
 const (
