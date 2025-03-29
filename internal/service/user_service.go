@@ -13,10 +13,12 @@ import (
 
 type UserService interface {
 	Create(fullName, email, passwordStr string, phone *string, gender model.Gender) error
-	GetCurrent(id uuid.UUID) (*model.User, error)
+	Get(id uuid.UUID) (*model.User, error)
 	Update(id uuid.UUID, userMap base.UpdateMap) error
 	Delete(id uuid.UUID) error
 	SoftDelete(id uuid.UUID) error
+	SetToActive(id uuid.UUID) error
+	SetToInactive(id uuid.UUID) error
 }
 
 type UserServiceRepo struct {
@@ -35,20 +37,27 @@ func (s UserServiceRepo) Create(fullName, email, passwordStr string, phone *stri
 		Gender:   gender,
 	}
 
-	pc := password.NewFromConfig(configs.Get())
-	hash, err := pc.Generate([]byte(passwordStr))
+	exist, err := s.repo.IsExist(&user)
 	if err != nil {
 		return err
 	}
 
-	if err := s.repo.Create(user, hash); err != nil {
-		return err
+	if !exist {
+		pc := password.NewFromConfig(configs.Get())
+		hash, err := pc.Generate([]byte(passwordStr))
+		if err != nil {
+			return err
+		}
+
+		if err := s.repo.Create(user, hash); err != nil {
+			return err
+		}
 	}
 
 	return nil
 }
 
-func (s UserServiceRepo) GetCurrent(id uuid.UUID) (*model.User, error) {
+func (s UserServiceRepo) Get(id uuid.UUID) (*model.User, error) {
 	return s.repo.FindByID(id)
 }
 
@@ -62,4 +71,12 @@ func (s UserServiceRepo) Delete(id uuid.UUID) error {
 
 func (s UserServiceRepo) SoftDelete(id uuid.UUID) error {
 	return s.Update(id, base.UpdateMap{"Active": false, "DeletedTime": time.Now().Local().UnixMilli()})
+}
+
+func (s UserServiceRepo) SetToActive(id uuid.UUID) error {
+	return s.Update(id, base.UpdateMap{"Active": true, "ActivatedTime": time.Now().Local().UnixMilli()})
+}
+
+func (s UserServiceRepo) SetToInactive(id uuid.UUID) error {
+	return s.Update(id, base.UpdateMap{"Active": false})
 }
