@@ -6,8 +6,12 @@ import (
 	"time"
 
 	"github.com/geekswamp/zen/internal/errors"
+	"github.com/geekswamp/zen/internal/logger"
+	"github.com/geekswamp/zen/pkg/http/middleware/cors"
 	"github.com/gin-gonic/gin"
 )
+
+var log = logger.New()
 
 type Router func(engine *gin.Engine)
 
@@ -36,8 +40,9 @@ func New(addr, mode string, router Router) Server {
 }
 
 func (c *Config) Start() error {
-	err := c.Server.ListenAndServe()
-	if err == http.ErrServerClosed {
+	log.Info("Starting server", logger.Server(c.Server.Addr))
+
+	if err := c.Server.ListenAndServe(); err == http.ErrServerClosed {
 		return err
 	}
 
@@ -52,7 +57,7 @@ func (c *Config) Stop() error {
 }
 
 func (c *Config) handler() *gin.Engine {
-	server := gin.New()
+	g := gin.New()
 
 	switch c.mode {
 	case "debug":
@@ -63,10 +68,13 @@ func (c *Config) handler() *gin.Engine {
 		panic(errors.ErrInvalidMode)
 	}
 
-	server.Use(c.middlewares...)
-	c.router(server)
+	g.Use(gin.Recovery()).
+		Use(cors.Default()).
+		Use(c.middlewares...)
 
-	return server
+	c.router(g)
+
+	return g
 }
 
 func (c *Config) ReadTimeout(timeout time.Duration) {
