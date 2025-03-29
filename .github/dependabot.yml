@@ -1,0 +1,25 @@
+version: 2
+updates:
+  - package-ecosystem: gomod
+    directory: /
+    target-branch: main
+    open-pull-requests-limit: 12
+    vendor: gomod
+    commit-message:
+      prefix: bump
+      prefix-development: bump
+      include: scope
+    schedule:
+      interval: weekly
+      day: sunday
+      time: "09:00"
+      timezone: Asia/Jakarta
+    reviewers:
+      - geekswamp
+    assignees:
+      - geekswamp
+    labels:
+      - bot
+      - bump
+      - dependabot
+      - dependencies
