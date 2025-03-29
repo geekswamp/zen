@@ -19,7 +19,7 @@ func (c *Config) New() (*zap.Logger, error) {
 
 	return zap.New(zapcore.NewCore(
 		encoder, zapcore.Lock(zapcore.AddSync(os.Stdout)), c.Level,
-	), zap.Fields(zap.String(logIdKey, id()))), nil
+	), zap.Fields(zap.String(_LogIdKey, id()))), nil
 }
 
 func newEncoderConfig() zapcore.EncoderConfig {
