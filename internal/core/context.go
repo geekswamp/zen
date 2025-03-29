@@ -57,3 +57,13 @@ func (c *Context) GetUserSession() *UserSession {
 
 	return nil
 }
+
+// ParseIDParam extracts and parses a UUID from the "id" URL parameter.
+func (c *Context) ParseIDParam() (ID uuid.UUID, err error) {
+	ID, err = uuid.Parse(c.ctx.Param("id"))
+	if err != nil {
+		return uuid.Nil, err
+	}
+
+	return ID, nil
+}
