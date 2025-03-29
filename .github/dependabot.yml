@@ -4,7 +4,6 @@ updates:
     directory: /
     target-branch: main
     open-pull-requests-limit: 12
-    vendor: true
     commit-message:
       prefix: bump
       prefix-development: bump
