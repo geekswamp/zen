@@ -77,8 +77,12 @@ func (b BaseResponse) ISE(c *gin.Context, err *Error) {
 	newResponse(c, http.StatusInternalServerError, err, nil)
 }
 
-func (b BaseResponse) Error(c *gin.Context, errParams any) {
-	switch err := errParams.(type) {
+// Error handles and formats error responses for HTTP requests.
+// It accepts a gin.Context and any error parameter, processing different error types:
+//   - For custom Error type: Responds with BadRequest
+//   - For standard error type: Processes specific cases like io.EOF with appropriate status codes
+func (b BaseResponse) Error(c *gin.Context, errParam any) {
+	switch err := errParam.(type) {
 	case Error:
 		b.BadRequest(c, err)
 
