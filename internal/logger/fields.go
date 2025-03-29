@@ -7,11 +7,12 @@ import (
 )
 
 const (
-	logIdKey            string = "log_id"
-	postgresInstanceKey string = "postgres_instance"
-	redisInstanceKey    string = "redis_instance"
-	localKey            string = "local"
-	errDetailsKey       string = "error_details"
+	_LogIdKey            string = "log_id"
+	_PostgresInstanceKey string = "postgres_instance"
+	_RedisInstanceKey    string = "redis_instance"
+	_LocalKey            string = "local"
+	_ErrDetailsKey       string = "error_details"
+	_ServerDetailsKey    string = "server_details"
 )
 
 func id() string {
@@ -19,17 +20,21 @@ func id() string {
 }
 
 func Postgres(name string) zapcore.Field {
-	return zap.String(postgresInstanceKey, name)
+	return zap.String(_PostgresInstanceKey, name)
 }
 
 func Redis(name string) zapcore.Field {
-	return zap.String(redisInstanceKey, name)
+	return zap.String(_RedisInstanceKey, name)
 }
 
 func Local(name string) zapcore.Field {
-	return zap.String(localKey, name)
+	return zap.String(_LocalKey, name)
 }
 
 func ErrDetails(err error) zapcore.Field {
-	return zap.NamedError(errDetailsKey, err)
+	return zap.NamedError(_ErrDetailsKey, err)
+}
+
+func Server(addr string) zapcore.Field {
+	return zap.String(_ServerDetailsKey, addr)
 }
