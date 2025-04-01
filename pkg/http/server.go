@@ -50,6 +50,8 @@ func (c *Config) Start() error {
 }
 
 func (c *Config) Stop() error {
+	log.Info("Stopping server", logger.Server(c.Server.Addr))
+
 	ctx, stop := context.WithTimeout(context.Background(), time.Second*3)
 	defer stop()
 
