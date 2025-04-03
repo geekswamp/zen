@@ -57,13 +57,10 @@ func ValidateQuery[T any](c *gin.Context) (*T, any) {
 }
 
 // ValidateBody is a generic function that validates and binds the request body to a given struct type T.
-func ValidateBody[T any](c *gin.Context) (*T, any) {
+func ValidateBody[T any](c *gin.Context) (*T, *http.Error) {
 	body := new(T)
-
 	if err := c.ShouldBindJSON(body); err != nil {
-		code := http.NotValidJSONFormat.Code()
-		errStr := err.Error()
-		return nil, http.Error{Code: code, Reason: errStr}
+		return nil, &http.Error{Code: http.NotValidJSONFormat.Code(), Reason: err.Error()}
 	}
 
 	if err := validateStruct(body); err != nil {
