@@ -90,27 +90,16 @@ func (b BaseResponse) ISE(c *gin.Context, err *Error) {
 //   - For standard error type: Processes specific cases like io.EOF with appropriate status codes
 func (b BaseResponse) Error(c *gin.Context, errParam any) {
 	switch err := errParam.(type) {
+	case string:
+		b.BadRequest(c, Error{Code: InputNotValid.Code(), Reason: err})
 	case Error:
 		b.BadRequest(c, err)
-
 	case error:
-		var code Errno
-		var msg string
-		var httpCode int
-
-		switch {
-		case err == io.EOF:
-			code = NotValidJSONFormat.Code()
-			msg = NotValidJSONFormat.Detail()
-			httpCode = http.StatusBadRequest
-
-		default:
-			code = SystemError.Code()
-			msg = SystemError.Detail()
-			httpCode = http.StatusInternalServerError
+		if err == io.EOF {
+			newResponse(c, http.StatusBadRequest, &Error{Code: NotValidJSONFormat.Code(), Reason: err.Error()}, nil)
 		}
 
-		newResponse(c, httpCode, &Error{Code: code, Reason: msg}, nil)
+		newResponse(c, http.StatusInternalServerError, &Error{Code: SystemError.Code(), Reason: SystemError.Detail()}, nil)
 	}
 }
 
