@@ -32,8 +32,15 @@ type Entries[T any] struct {
 	HasReachedMax bool  `json:"has_reached_max"`
 }
 
-// New creates and sends a JSON response using the provided gin.Context.
-func New(c *gin.Context, httpCode int, message, err *Error, data any) {
+// New creates and returns a new empty instance of BaseResponse.
+// This function serves as a constructor for initializing a BaseResponse object
+// with its zero values.
+func New() BaseResponse {
+	return BaseResponse{}
+}
+
+// NewJSON creates and sends a JSON response using the provided gin.Context.
+func NewJSON(c *gin.Context, httpCode int, message, err *Error, data any) {
 	newResponse(c, httpCode, err, data)
 }
 
