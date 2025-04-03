@@ -6,5 +6,6 @@ var (
 	InputNotValid      = NewErrorCode("ERR-PA40002", "The provided input is not valid")
 	Forbidden          = NewErrorCode("ERR-PA40003", "Access to this resource is forbidden")
 	NotValidQuery      = NewErrorCode("ERR-PA40004", "The provided URL Query is not valid")
+	InvalidRequestID   = NewErrorCode("ERR-HR40001", "Invalid X-Request-ID format. It must be a valid UUID")
 	SystemError        = NewErrorCode("ERR-SY50001", "A system error has occurred, please try again later")
 )
