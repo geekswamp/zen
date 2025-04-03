@@ -7,7 +7,6 @@ import (
 
 	"github.com/geekswamp/zen/internal/errors"
 	"github.com/geekswamp/zen/internal/logger"
-	"github.com/geekswamp/zen/pkg/http/middleware/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -24,14 +23,18 @@ type Config struct {
 	*http.Server
 	mode        string
 	middlewares []gin.HandlerFunc
-	router      Router
+	routerFunc  Router
 }
 
-func New(addr, mode string, router Router) Server {
+type Option func(c *Config)
+
+func New(addr string, opts ...Option) Server {
 	config := &Config{
 		Server: &http.Server{Addr: addr},
-		mode:   mode,
-		router: router,
+	}
+
+	for _, opt := range opts {
+		opt(config)
 	}
 
 	config.Handler = config.handler()
@@ -70,23 +73,29 @@ func (c *Config) handler() *gin.Engine {
 		panic(errors.ErrInvalidMode)
 	}
 
-	g.Use(gin.Recovery()).
-		Use(cors.Default()).
-		Use(c.middlewares...)
+	g.Use(c.middlewares...)
 
-	c.router(g)
+	c.routerFunc(g)
 
 	return g
 }
 
-func (c *Config) ReadTimeout(timeout time.Duration) {
-	c.Server.ReadTimeout = timeout
+func ReadTimeout(timout time.Duration) Option {
+	return func(c *Config) { c.Server.ReadTimeout = timout }
 }
 
-func (c *Config) WriteTimeout(timeout time.Duration) {
-	c.Server.WriteTimeout = timeout
+func WriteTimeout(timout time.Duration) Option {
+	return func(c *Config) { c.Server.WriteTimeout = timout }
 }
 
-func (c *Config) Middleware(middlewares ...gin.HandlerFunc) {
-	c.middlewares = append(c.middlewares, middlewares...)
+func SetMode(mode string) Option {
+	return func(c *Config) { c.mode = mode }
+}
+
+func Middlewares(middlewares ...gin.HandlerFunc) Option {
+	return func(c *Config) { c.middlewares = append(c.middlewares, middlewares...) }
+}
+
+func RegisterRouter(router Router) Option {
+	return func(c *Config) { c.routerFunc = router }
 }
