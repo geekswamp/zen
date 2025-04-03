@@ -16,14 +16,14 @@ func RequestID() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		c := core.NewContext(ctx)
 		reqID := ctx.Request.Header.Get(_HeaderXRequestIDKey)
-		ID := uuid.New()
 
 		if reqID == "" {
-
-			ctx.Request.Header.Set(_HeaderXRequestIDKey, ID.String())
-			c.SetRequestID(ID)
+			reqID = uuid.NewString()
 		}
-		ctx.Writer.Header().Set(_HeaderXRequestIDKey, ID.String())
+
+		ctx.Request.Header.Set(_HeaderXRequestIDKey, reqID)
+		ctx.Writer.Header().Set(_HeaderXRequestIDKey, reqID)
+		c.SetRequestID(uuid.MustParse(reqID))
 		ctx.Next()
 	}
 }
