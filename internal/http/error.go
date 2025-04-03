@@ -13,10 +13,10 @@ type ErrorCode struct {
 
 var errCodes = map[Errno]struct{}{}
 
-// NewErrorCode creates a new ErrorCode instance with the provided error code and detail.
-// If the code doesn't exist, it panics with an ErrInvalidErrCode error.
+// NewErrorCode creates a new ErrorCode instance with the specified error code and detail.
+// It panics if the error code is already registered in errCodes to prevent duplicate error codes.
 func NewErrorCode(code Errno, detail string) *ErrorCode {
-	if _, ok := errCodes[code]; !ok {
+	if _, ok := errCodes[code]; ok {
 		panic(errors.ErrInvalidErrCode)
 	}
 
