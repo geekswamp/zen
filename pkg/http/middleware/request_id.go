@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"github.com/geekswamp/zen/internal/core"
+	"github.com/geekswamp/zen/internal/http"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
@@ -21,9 +22,25 @@ func RequestID() gin.HandlerFunc {
 			reqID = uuid.NewString()
 		}
 
-		ctx.Request.Header.Set(_HeaderXRequestIDKey, reqID)
-		ctx.Writer.Header().Set(_HeaderXRequestIDKey, reqID)
-		c.SetRequestID(uuid.MustParse(reqID))
+		ID, err := uuid.Parse(reqID)
+		if err != nil {
+			// If the request ID is invalid, generate a new one and set it in the context and headers.
+			// Also, return a 400 Bad Request response with an error message.
+			ID = uuid.New()
+			c.SetRequestID(ID)
+			ctx.Request.Header.Set(_HeaderXRequestIDKey, ID.String())
+			ctx.Writer.Header().Set(_HeaderXRequestIDKey, ID.String())
+			http.New().BadRequest(ctx, http.Error{
+				Code:   http.InvalidRequestID.Code(),
+				Reason: http.InvalidRequestID.Detail(),
+			})
+			ctx.Abort()
+			return
+		}
+
+		c.SetRequestID(ID)
+		ctx.Request.Header.Set(_HeaderXRequestIDKey, ID.String())
+		ctx.Writer.Header().Set(_HeaderXRequestIDKey, ID.String())
 		ctx.Next()
 	}
 }
