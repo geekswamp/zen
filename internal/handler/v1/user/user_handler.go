@@ -16,7 +16,7 @@ type UserHandler struct {
 	context core.Context
 }
 
-func NewUserHandler(resp http.BaseResponse, service service.UserService) UserHandler {
+func New(resp http.BaseResponse, service service.UserService) UserHandler {
 	return UserHandler{resp: resp, service: service}
 }
 
