@@ -15,8 +15,8 @@ const (
 type User struct {
 	base.Model
 	FullName      string       `gorm:"column:full_name;type:varchar;not null"`
-	Email         string       `gorm:"column:email;type:varchar;uniqueIndex:idx_users_contact;not null"`
-	Phone         *string      `gorm:"column:phone;type:varchar;uniqueIndex:idx_users_contact"`
+	Email         string       `gorm:"column:email;type:varchar;uniqueIndex;not null"`
+	Phone         string       `gorm:"column:phone;type:varchar;uniqueIndex"`
 	Active        bool         `gorm:"column:active;type:boolean;default:false;not null"`
 	Gender        Gender       `gorm:"column:gender;type:smallint;not null"`
 	ActivatedTime int64        `gorm:"column:activated_time"`
