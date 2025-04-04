@@ -35,11 +35,11 @@ func (s userSeeder) Seed(db *gorm.DB) error {
 		Email:         "john@doe.com",
 		Gender:        model.Male,
 		Active:        true,
-		ActivatedTime: time.Now().UnixMilli(),
+		ActivatedTime: time.Now().Local().UnixMilli(),
 		Phone:         "+6281234567890",
 		Model: base.Model{
 			ID:          userID,
-			CreatedTime: time.Now().UnixMilli(),
+			CreatedTime: time.Now().Local().UnixMilli(),
 		},
 	}
 
