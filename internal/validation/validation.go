@@ -1,15 +1,14 @@
 package validation
 
 import (
-	errors2 "errors"
+	"errors"
 	"reflect"
 	"strings"
 
-	"github.com/geekswamp/zen/internal/errors"
+	errs "github.com/geekswamp/zen/internal/errors"
 	"github.com/geekswamp/zen/internal/http"
 	"github.com/geekswamp/zen/internal/logger"
 	"github.com/gin-gonic/gin"
-	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/locales/en"
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
@@ -23,10 +22,11 @@ var (
 )
 
 func init() {
-	trans, _ = ut.New(en.New()).GetTranslator("en")
+	translator, _ := ut.New(en.New()).GetTranslator("en")
+	trans = translator
 
-	if err := enTrans.RegisterDefaultTranslations(binding.Validator.Engine().(*validator.Validate), trans); err != nil {
-		log.Error(errors.ErrValidatorTrans.Error(), logger.ErrDetails(err))
+	if err := enTrans.RegisterDefaultTranslations(validate, trans); err != nil {
+		log.Error(errs.ErrValidatorTrans.Error(), logger.ErrDetails(err))
 	}
 
 	validate.RegisterTagNameFunc(func(field reflect.StructField) string {
@@ -34,33 +34,16 @@ func init() {
 		if name == "-" {
 			return ""
 		}
+
 		return name
 	})
-
-	if err := enTrans.RegisterDefaultTranslations(binding.Validator.Engine().(*validator.Validate), trans); err != nil {
-		log.Error(errors.ErrValidatorTrans.Error(), logger.ErrDetails(err))
-	}
 }
 
-// ValidateQuery is a generic function that validates query parameters from a gin.Context.
-func ValidateQuery[T any](c *gin.Context) (*T, any) {
-	query := new(T)
-	if err := c.ShouldBindQuery(query); err != nil {
-		return nil, http.Error{Code: http.NotValidQuery.Code(), Reason: err.Error()}
-	}
-
-	if err := validateStruct(query); err != nil {
-		return nil, err
-	}
-
-	return query, nil
-}
-
-// ValidateBody is a generic function that validates and binds the request body to a given struct type T.
+// ValidateBody performs JSON binding and validation using custom validator
 func ValidateBody[T any](c *gin.Context) (*T, *http.Error) {
 	body := new(T)
 	if err := c.ShouldBindJSON(body); err != nil {
-		return nil, &http.Error{Code: http.NotValidJSONFormat.Code(), Reason: err.Error()}
+		return nil, &http.Error{Code: http.NotValidJSONFormat.Code(), Reason: http.NotValidJSONFormat.Detail()}
 	}
 
 	if err := validateStruct(body); err != nil {
@@ -70,24 +53,35 @@ func ValidateBody[T any](c *gin.Context) (*T, *http.Error) {
 	return body, nil
 }
 
-func validateStruct(body any) *http.Error {
-	var code http.Errno
-	var msg string
+// ValidateQuery performs query binding and validation using custom validator
+func ValidateQuery[T any](c *gin.Context) (*T, *http.Error) {
+	query := new(T)
+	if err := c.ShouldBindQuery(query); err != nil {
+		return nil, &http.Error{Code: http.NotValidQuery.Code(), Reason: err.Error()}
+	}
 
-	if err := validate.Struct(body); err != nil {
+	if err := validateStruct(query); err != nil {
+		return nil, err
+	}
+
+	return query, nil
+}
+
+// validateStruct performs field-level validation and returns formatted error
+func validateStruct(data any) *http.Error {
+	if err := validate.Struct(data); err != nil {
 		var validationErrs validator.ValidationErrors
-		if errors2.As(err, &validationErrs) {
+		if errors.As(err, &validationErrs) {
 			firstErr := validationErrs[0]
-			code = http.InputNotValid.Code()
-			msg = firstErr.Translate(trans)
-
-			return &http.Error{Code: code, Reason: msg}
+			return &http.Error{
+				Code:   http.InputNotValid.Code(),
+				Reason: firstErr.Translate(trans),
+			}
 		}
-
-		code = http.NotValidJSONFormat.Code()
-		msg = err.Error()
-
-		return &http.Error{Code: code, Reason: msg}
+		return &http.Error{
+			Code:   http.NotValidJSONFormat.Code(),
+			Reason: err.Error(),
+		}
 	}
 
 	return nil
