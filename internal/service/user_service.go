@@ -12,7 +12,7 @@ import (
 )
 
 type UserService interface {
-	Create(fullName, email, passwordStr string, phone *string, gender model.Gender) error
+	Create(fullName, email, passwordStr string, phone string, gender model.Gender) error
 	Get(id uuid.UUID) (*model.User, error)
 	Update(id uuid.UUID, userMap base.UpdateMap) error
 	Delete(id uuid.UUID) error
@@ -29,7 +29,7 @@ func NewUserService(repo repository.UserRepository) UserService {
 	return UserServiceRepo{repo: repo}
 }
 
-func (s UserServiceRepo) Create(fullName, email, passwordStr string, phone *string, gender model.Gender) error {
+func (s UserServiceRepo) Create(fullName, email, passwordStr string, phone string, gender model.Gender) error {
 	user := model.User{
 		FullName: fullName,
 		Email:    email,
@@ -37,24 +37,13 @@ func (s UserServiceRepo) Create(fullName, email, passwordStr string, phone *stri
 		Gender:   gender,
 	}
 
-	exist, err := s.repo.IsExist(&user)
+	pc := password.NewFromConfig(configs.Get())
+	hash, err := pc.Generate([]byte(passwordStr))
 	if err != nil {
 		return err
 	}
 
-	if !exist {
-		pc := password.NewFromConfig(configs.Get())
-		hash, err := pc.Generate([]byte(passwordStr))
-		if err != nil {
-			return err
-		}
-
-		if err := s.repo.Create(user, hash); err != nil {
-			return err
-		}
-	}
-
-	return nil
+	return s.repo.Create(user, hash)
 }
 
 func (s UserServiceRepo) Get(id uuid.UUID) (*model.User, error) {
