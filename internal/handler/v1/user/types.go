@@ -6,7 +6,7 @@ type UserCreateRequest struct {
 	FullName string  `json:"full_name" validate:"required,min=3,max=100"`
 	Email    string  `json:"email" validate:"required,email"`
 	Phone    *string `json:"phone" validate:"e164"`
-	Gender   int     `json:"gender" validate:"required,number,gte=1"`
+	Gender   int     `json:"gender" validate:"required,oneof=0 1"`
 	Password string  `json:"password" validate:"required,password"`
 }
 
@@ -14,7 +14,7 @@ type UserUpdateInfoRequest struct {
 	FullName string  `json:"full_name" validate:"min=3,max=100"`
 	Email    string  `json:"email" validate:"email"`
 	Phone    *string `json:"phone" validate:"e164"`
-	Gender   int     `json:"gender" validate:"number,gte=1"`
+	Gender   int     `json:"gender" validate:"oneof=0 1"`
 }
 
 type UserInfoResponse struct {
