@@ -17,7 +17,7 @@ type UserRepository interface {
 
 type UserQueryBuilder struct{ repo base.Repository }
 
-func NewRepo(repo base.Repository) UserRepository {
+func NewUserRepo(repo base.Repository) UserRepository {
 	return UserQueryBuilder{repo: repo}
 }
 
