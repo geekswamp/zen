@@ -84,19 +84,23 @@ func (b BaseResponse) ISE(c *gin.Context, err *Error) {
 	newResponse(c, http.StatusInternalServerError, err, nil)
 }
 
+// NotFound sends a JSON response with http 404 Not Found status code.
+func (b BaseResponse) NotFound(c *gin.Context) {
+	newResponse(c, http.StatusNotFound, &Error{Code: NotFound.Code(), Reason: NotFound.Detail()}, nil)
+}
+
 // Error handles and formats error responses for HTTP requests.
 // It accepts a gin.Context and any error parameter, processing different error types:
 //   - For custom Error type: Responds with BadRequest
 //   - For standard error type: Processes specific cases like io.EOF with appropriate status codes
 func (b BaseResponse) Error(c *gin.Context, errParam any) {
 	switch err := errParam.(type) {
-	case string:
-		b.BadRequest(c, Error{Code: InputNotValid.Code(), Reason: err})
-	case Error:
-		b.BadRequest(c, err)
+	case *Error:
+		b.BadRequest(c, *err)
 	case error:
 		if err == io.EOF {
-			newResponse(c, http.StatusBadRequest, &Error{Code: NotValidJSONFormat.Code(), Reason: err.Error()}, nil)
+			newResponse(c, http.StatusBadRequest, &Error{Code: NotValidJSONFormat.Code(), Reason: NotValidJSONFormat.Detail()}, nil)
+			return
 		}
 
 		newResponse(c, http.StatusInternalServerError, &Error{Code: SystemError.Code(), Reason: SystemError.Detail()}, nil)
