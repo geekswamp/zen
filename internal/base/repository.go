@@ -1,6 +1,10 @@
 package base
 
-import "gorm.io/gorm"
+import (
+	"strings"
+
+	"gorm.io/gorm"
+)
 
 // UpdateMap represents a map used for dynamic updates in repository operations.
 // The string key represents the field name to be updated, and the any value
@@ -21,4 +25,15 @@ func NewRepo(db *gorm.DB) Repository {
 // DB returns the GORM database instance used by the repository.
 func (r Repository) DB() *gorm.DB {
 	return r.db
+}
+
+// IsDuplicateKey checks if the given error is a duplicate key constraint violation in the database.
+// It returns gorm.ErrDuplicatedKey if the error contains a duplicate key violation message,
+// otherwise returns nil.
+func (r Repository) IsDuplicateKey(err error) error {
+	if err != nil && strings.Contains(err.Error(), "duplicate key value violates unique constraint") {
+		return gorm.ErrDuplicatedKey
+	}
+
+	return nil
 }
