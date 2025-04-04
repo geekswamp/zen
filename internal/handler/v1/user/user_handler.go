@@ -8,12 +8,12 @@ import (
 	"github.com/geekswamp/zen/internal/service"
 	"github.com/geekswamp/zen/internal/validation"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type UserHandler struct {
 	resp    http.BaseResponse
 	service service.UserService
-	context core.Context
 }
 
 func New(resp http.BaseResponse, service service.UserService) UserHandler {
@@ -28,6 +28,10 @@ func (h UserHandler) Register(ctx *gin.Context) {
 	}
 
 	if err := h.service.Create(body.FullName, body.Email, body.Password, body.Phone, model.Gender(body.Gender)); err != nil {
+		if err == gorm.ErrDuplicatedKey {
+			h.resp.BadRequest(ctx, http.Error{Code: http.UserAlreadyExists.Code(), Reason: http.UserAlreadyExists.Detail()})
+			return
+		}
 		h.resp.Error(ctx, err)
 		return
 	}
@@ -36,7 +40,9 @@ func (h UserHandler) Register(ctx *gin.Context) {
 }
 
 func (h UserHandler) GetCurrent(ctx *gin.Context) {
-	user, err := h.service.Get(h.context.GetUserSession().ID)
+	c := core.NewContext(ctx)
+
+	user, err := h.service.Get(c.GetUserSession().ID)
 	if err != nil {
 		h.resp.Error(ctx, err)
 		return
@@ -59,7 +65,9 @@ func (h UserHandler) GetCurrent(ctx *gin.Context) {
 }
 
 func (h UserHandler) GetDetail(ctx *gin.Context) {
-	ID, err := h.context.ParseIDParam()
+	c := core.NewContext(ctx)
+
+	ID, err := c.ParseIDParam()
 	if err != nil {
 		h.resp.Error(ctx, err)
 		return
@@ -67,6 +75,10 @@ func (h UserHandler) GetDetail(ctx *gin.Context) {
 
 	user, err := h.service.Get(ID)
 	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			h.resp.NotFound(ctx)
+			return
+		}
 		h.resp.Error(ctx, err)
 		return
 	}
@@ -88,13 +100,15 @@ func (h UserHandler) GetDetail(ctx *gin.Context) {
 }
 
 func (h UserHandler) Update(ctx *gin.Context) {
+	c := core.NewContext(ctx)
+
 	body, err := validation.ValidateBody[UserUpdateInfoRequest](ctx)
 	if err != nil {
 		h.resp.Error(ctx, err)
 		return
 	}
 
-	if err := h.service.Update(h.context.GetUserSession().ID, base.UpdateMap{
+	if err := h.service.Update(c.GetUserSession().ID, base.UpdateMap{
 		"FullName": body.FullName,
 		"Email":    body.Email,
 		"Phone":    body.Phone,
@@ -108,7 +122,9 @@ func (h UserHandler) Update(ctx *gin.Context) {
 }
 
 func (h UserHandler) HardDelete(ctx *gin.Context) {
-	ID, err := h.context.ParseIDParam()
+	c := core.NewContext(ctx)
+
+	ID, err := c.ParseIDParam()
 	if err != nil {
 		h.resp.Error(ctx, err)
 		return
@@ -123,7 +139,9 @@ func (h UserHandler) HardDelete(ctx *gin.Context) {
 }
 
 func (h UserHandler) SoftDelete(ctx *gin.Context) {
-	ID, err := h.context.ParseIDParam()
+	c := core.NewContext(ctx)
+
+	ID, err := c.ParseIDParam()
 	if err != nil {
 		h.resp.Error(ctx, err)
 		return
@@ -138,7 +156,9 @@ func (h UserHandler) SoftDelete(ctx *gin.Context) {
 }
 
 func (h UserHandler) SetToActive(ctx *gin.Context) {
-	ID, err := h.context.ParseIDParam()
+	c := core.NewContext(ctx)
+
+	ID, err := c.ParseIDParam()
 	if err != nil {
 		h.resp.Error(ctx, err)
 		return
@@ -153,7 +173,9 @@ func (h UserHandler) SetToActive(ctx *gin.Context) {
 }
 
 func (h UserHandler) SetToInactive(ctx *gin.Context) {
-	ID, err := h.context.ParseIDParam()
+	c := core.NewContext(ctx)
+
+	ID, err := c.ParseIDParam()
 	if err != nil {
 		h.resp.Error(ctx, err)
 		return
