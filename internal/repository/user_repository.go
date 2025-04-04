@@ -22,18 +22,22 @@ func NewUserRepo(repo base.Repository) UserRepository {
 }
 
 func (q UserQueryBuilder) Create(user model.User, passHash string) error {
-	return q.repo.DB().Transaction(func(tx *gorm.DB) error {
+	err := q.repo.DB().Transaction(func(tx *gorm.DB) error {
 		if err := tx.Create(&user).Error; err != nil {
 			return err
 		}
-
-		passHash := model.UserPassHash{UserID: user.ID, PassHash: passHash}
-		if err := tx.Create(&passHash).Error; err != nil {
+		passHashModel := model.UserPassHash{UserID: user.ID, PassHash: passHash}
+		if err := tx.Create(&passHashModel).Error; err != nil {
 			return err
 		}
-
 		return nil
 	})
+
+	if err := q.repo.IsDuplicateKey(err); err != nil {
+		return err
+	}
+
+	return err
 }
 
 func (q UserQueryBuilder) FindByID(id uuid.UUID) (*model.User, error) {
