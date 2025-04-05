@@ -8,8 +8,8 @@ import (
 
 // UpdateMap represents a map used for dynamic updates in repository operations.
 // The string key represents the field name to be updated, and the any value
-// represents the new value to be set for that field.
-type UpdateMap map[string]any
+// represents the new value to be set for that field. Reference: https://github.com/go-gorm/gorm/issues/5297#issuecomment-1109486446
+type UpdateMap = map[string]any
 
 // Repository represents a base data access layer struct that holds a GORM database connection.
 // It serves as a foundation for specific repository implementations by providing access to the database instance.
