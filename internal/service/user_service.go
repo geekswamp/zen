@@ -59,13 +59,13 @@ func (s UserServiceRepo) Delete(id uuid.UUID) error {
 }
 
 func (s UserServiceRepo) SoftDelete(id uuid.UUID) error {
-	return s.Update(id, base.UpdateMap{"Active": false, "DeletedTime": time.Now().Local().UnixMilli()})
+	return s.Update(id, base.UpdateMap{"active": false, "deleted_time": time.Now().Local().UnixMilli()})
 }
 
 func (s UserServiceRepo) SetToActive(id uuid.UUID) error {
-	return s.Update(id, base.UpdateMap{"Active": true, "ActivatedTime": time.Now().Local().UnixMilli()})
+	return s.Update(id, base.UpdateMap{"active": true, "activated_time": time.Now().Local().UnixMilli()})
 }
 
 func (s UserServiceRepo) SetToInactive(id uuid.UUID) error {
-	return s.Update(id, base.UpdateMap{"Active": false})
+	return s.Update(id, base.UpdateMap{"active": false})
 }
