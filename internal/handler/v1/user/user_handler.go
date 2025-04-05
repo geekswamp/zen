@@ -79,6 +79,7 @@ func (h UserHandler) GetDetail(ctx *gin.Context) {
 			h.resp.NotFound(ctx)
 			return
 		}
+
 		h.resp.Error(ctx, err)
 		return
 	}
@@ -131,6 +132,11 @@ func (h UserHandler) HardDelete(ctx *gin.Context) {
 	}
 
 	if err := h.service.Delete(ID); err != nil {
+		if err == gorm.ErrRecordNotFound {
+			h.resp.NotFound(ctx)
+			return
+		}
+
 		h.resp.Error(ctx, err)
 		return
 	}
@@ -148,6 +154,11 @@ func (h UserHandler) SoftDelete(ctx *gin.Context) {
 	}
 
 	if err := h.service.SoftDelete(ID); err != nil {
+		if err == gorm.ErrRecordNotFound {
+			h.resp.NotFound(ctx)
+			return
+		}
+
 		h.resp.Error(ctx, err)
 		return
 	}
@@ -165,6 +176,11 @@ func (h UserHandler) SetToActive(ctx *gin.Context) {
 	}
 
 	if err := h.service.SetToActive(ID); err != nil {
+		if err == gorm.ErrRecordNotFound {
+			h.resp.NotFound(ctx)
+			return
+		}
+
 		h.resp.Error(ctx, err)
 		return
 	}
@@ -182,6 +198,11 @@ func (h UserHandler) SetToInactive(ctx *gin.Context) {
 	}
 
 	if err := h.service.SetToInactive(ID); err != nil {
+		if err == gorm.ErrRecordNotFound {
+			h.resp.NotFound(ctx)
+			return
+		}
+
 		h.resp.Error(ctx, err)
 		return
 	}
