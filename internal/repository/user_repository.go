@@ -63,14 +63,21 @@ func (q UserQueryBuilder) IsExist(user *model.User) (bool, error) {
 }
 
 func (q UserQueryBuilder) Update(id uuid.UUID, userMap base.UpdateMap) error {
-	user, err := q.FindByID(id)
-	if err != nil {
-		return err
+	qr := q.repo.DB().Model(&model.User{}).Where("id = ?", id).Updates(userMap)
+
+	if qr.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
 	}
 
-	return q.repo.DB().Model(user).Updates(userMap).Error
+	return qr.Error
 }
 
 func (q UserQueryBuilder) Delete(id uuid.UUID) error {
-	return q.repo.DB().Delete(&model.User{}, id).Error
+	qr := q.repo.DB().Unscoped().Model(&model.User{}).Where("id = ?", id).Delete(&model.User{})
+
+	if qr.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+
+	return qr.Error
 }
