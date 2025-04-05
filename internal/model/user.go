@@ -13,7 +13,7 @@ const (
 )
 
 type User struct {
-	base.Model
+	base.Model    `gorm:"embedded"`
 	FullName      string       `gorm:"column:full_name;type:varchar;not null"`
 	Email         string       `gorm:"column:email;type:varchar;uniqueIndex;not null"`
 	Phone         string       `gorm:"column:phone;type:varchar;uniqueIndex"`
